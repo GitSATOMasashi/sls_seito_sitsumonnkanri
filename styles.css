@@ -1,0 +1,504 @@
+/* 全体のベーススタイル */
+:root {
+    --header-height: 60px;
+    --sidebar-width: 240px;
+    --primary: #4461DB;
+    --secondary: #FDB946;
+    --success: #4CAF50;
+    --text-primary: #1A1F36;
+    --text-secondary: #697386;
+    --bg-light: #F7F9FC;
+    --bg-white: #FFFFFF;
+    --border: #E5E9F2;
+    --spacing: 24px;
+    --radius-base: 12px;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --primary-color: #2d3b80;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* レイアウト構造 */
+.main-container {
+    padding-top: var(--header-height);
+    margin-left: var(--sidebar-width);
+    padding-left: 40px;  /* サイドバーと同じパディング */
+    padding-right: 40px;  /* 右側にも同じパディング */
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: calc(7 / 12 * 100%) calc(5 / 12 * 100%);
+    gap: 14px;
+}
+
+/* 左カラム - 講義内容 */
+.lecture-content {
+    background: none;
+    width: 100%;  /* 親要素に対して100%の幅 */
+}
+
+/* ページヘッダー */
+.page-header {
+    margin-bottom: 32px;
+    margin-top: 1rem;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.page-path {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.page-path span {
+    color: var(--text-secondary);
+}
+
+.page-path span:not(:last-child)::after {
+    content: "/";
+    margin: 0 8px;
+    color: #DDD;
+}
+
+/* パンくず */
+.breadcrumb {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.breadcrumb span {
+    color: var(--text-secondary);
+}
+
+.breadcrumb span:not(:last-child)::after {
+    content: "/";
+    margin: 0 8px;
+    color: #DDD;
+}
+
+/* 講義コンテンツ */
+.action-box {
+    background: var(--bg-white);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.action-title {
+    background: var(--primary);
+    padding: 15px 24px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.action-badge {
+    background: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    position: absolute;
+    right: 24px;
+}
+
+.action-content {
+    padding: 24px;
+    padding-top: 0;
+}
+
+.action-description {
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.action-items {
+    background: #F8F9FA;
+    border-radius: 8px;
+    padding: 8px 0;
+}
+
+.action-item {
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.action-item-icon {
+    color: var(--text-primary);
+}
+
+/* 右カラム */
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 450px;
+}
+
+/* セルフチェック */
+.checklist-section {
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 0;
+    background-color: white;
+}
+
+.checklist-title {
+    background: linear-gradient(to right, #FFD66B, #FFA63D);  /* 黄色からオレンジへのグラデーション */
+    padding: 15px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.checklist {
+    background: white;
+    margin: 16px 16px 0;
+    border-radius: 12px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-radius: 8px;
+    border: solid 1px #ebebeb;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.check-item-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.check-item label {
+    color: var(--text-primary);
+    font-size: 14px;
+    margin-right: 32px;  /* ヘルプボタン用のスペース */
+}
+
+.help-button {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 12px;
+    margin-right: 16px;  /* チェックボックスとの間隔 */
+}
+
+.check-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #DDD;
+    border-radius: 4px;
+    appearance: none;
+    margin: 0;  /* デフォルトマージンを削除 */
+    cursor: pointer;
+}
+
+.check-item input[type="checkbox"]:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.next-action-button {
+    width: 80%;  /* 幅を80%に変更 */
+    padding: 16px;
+    background: #E9ECEF;
+    border: none;
+    border-radius: 100px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    margin: 16px auto;  /* 上下マージン16px、左右autoで中央寄せ */
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: block;  /* ブロック要素として表示 */
+}
+
+.next-action-button:hover {
+    background: #DEE2E6;
+}
+
+/* 質問セクション */
+.question-section {
+    background: #F3F0FF;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.question-title {
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 8px;
+}
+
+.question-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.question-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.question-buttons button {
+    padding: 14px;
+    background: white;
+    border: 1px solid #E9ECEF;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.view-history-button {
+    color: var(--text-secondary);
+    background: none !important;
+    border: none !important;
+    text-decoration: underline;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+/* ヘッダー */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    --tw-bg-opacity: 1;  /* 不透明度を設定 */
+    background-color: rgb(19 16 108 / var(--tw-bg-opacity));  /* 新しい色を設定 */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    z-index: 1000;
+}
+
+.logo {
+    margin: 0;  /* デフォルトマージンを削除 */
+    line-height: 0;  /* 余分な高さを削除 */
+}
+
+.logo-image {
+    height: 25px;
+    width: auto;
+    vertical-align: middle;
+    filter: brightness(0) invert(1);  /* 画像を白色に変換 */
+}
+
+/* テキストロゴを削除 */
+.logo-text {
+    display: none;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-dropdown {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #fff;
+    background-color: transparent;
+    color: white;
+}
+
+.profile-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: white;
+    color: rgb(19 16 108);  /* ヘッダーと同じ色に */
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* サイドバー */
+.sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 220px;
+    height: calc(100vh - var(--header-height));
+    background-color: white;
+    padding-left: 40px;
+    padding-top: 20px;  /* 上部にも余白を追加 */
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin: 0;
+    border-bottom: none;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px 16px 0;  /* 右パディングのみ残す */
+    text-decoration: none;
+    color: var(--text-color);
+    position: relative;
+    font-size: 14px;
+}
+
+/* アイコンのスタイルを更新 */
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    color: #333;
+}
+
+/* 不要なアイコンスタイルを削除 */
+.nav-icon-home::before,
+.nav-icon-search::before,
+.nav-icon-search::after,
+.nav-icon-tutorial::before,
+.nav-icon-qa::before,
+.nav-icon-qa::after,
+.nav-icon-notification::before,
+.nav-icon-logout::before,
+.nav-icon-logout::after {
+    content: none;
+}
+
+.link {
+    color: #0066cc;
+    text-decoration: none;
+    display: block;
+    margin: 5px 0;
+    word-break: break-all;
+}
+
+.check-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* コースヘッダー */
+.course-header {
+    background: none;
+    padding: 0 0 24px 0;
+}
+
+.course-title {
+    max-width: 1200px;
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+/* ネクストアクション */
+.next-action-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.next-action-path {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* 講義セクションのスタイル */
+.lecture-section {
+    margin-top: 32px;
+}
+
+.lecture-subtitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.lecture-point {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-light);
+    border-radius: 12px;
+}
+
+.point-number {
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.point-content {
+    flex: 1;
+}
+
+.point-content h5 {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.point-content p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+} 

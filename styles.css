@@ -14,6 +14,7 @@
     --radius-base: 12px;
     --shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
     --primary-color: #2d3b80;
+    --breakpoint-mobile: 768px;  /* モバイルブレイクポイント */
 }
 
 body {
@@ -21,6 +22,7 @@ body {
     background: var(--bg-light);
     color: var(--text-primary);
     line-height: 1.6;
+    margin: 0;
 }
 
 /* レイアウト構造 */
@@ -366,33 +368,67 @@ body {
     left: 0;
     right: 0;
     height: var(--header-height);
-    --tw-bg-opacity: 1;  /* 不透明度を設定 */
-    background-color: rgb(19 16 108 / var(--tw-bg-opacity));  /* 新しい色を設定 */
+    --tw-bg-opacity: 1;
+    background-color: rgb(19 16 108 / var(--tw-bg-opacity));
     color: white;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 40px;
+    justify-content: space-between;
+    padding: 0 24px;
     z-index: 1000;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .logo {
-    margin: 0;  /* デフォルトマージンを削除 */
-    line-height: 0;  /* 余分な高さを削除 */
+    margin: 0;
 }
 
 .logo-image {
     height: 25px;
     width: auto;
-    vertical-align: middle;
-    filter: brightness(0) invert(1);  /* 画像を白色に変換 */
+    filter: brightness(0) invert(1);
 }
 
-/* テキストロゴを削除 */
-.logo-text {
-    display: none;
+/* ハンバーガーメニューのスタイル調整 */
+.hamburger-menu {
+    display: none;  /* デフォルトは非表示 */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 20px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
+.hamburger-menu span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: white;  /* ハンバーガーメニューの線を白色に */
+    transition: all 0.3s ease;
+}
+
+/* ハンバーガーメニューのアクティブ状態 */
+.hamburger-menu.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* ヘッダー右側の要素 */
 .header-right {
     display: flex;
     align-items: center;
@@ -405,17 +441,6 @@ body {
     border: 1px solid #fff;
     background-color: transparent;
     color: white;
-}
-
-.profile-button {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: white;
-    color: rgb(19 16 108);  /* ヘッダーと同じ色に */
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
 }
 
 /* サイドバー */
@@ -567,15 +592,15 @@ body {
 /* FABメニューコンテナ */
 .fab-container {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 30px;
+    right: 40px;
     z-index: 1000;
 }
 
 /* メインFABボタン */
 .ai-assistant-fab {
     position: relative;
-    padding: 12px 20px;
+    padding: 15px 25px;
     background: linear-gradient(
         45deg,
         #EE7800,    /* ベースのオレンジ */
@@ -870,4 +895,125 @@ body {
 
 .send-button:hover {
     background: #3651C0;
+}
+
+/* ヘッダードロップダウンのモバイル用スタイル */
+.sidebar-dropdown {
+    display: none;  /* デフォルトでは非表示 */
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.header-dropdown.mobile {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: transparent;
+    color: var(--text-primary);
+}
+
+/* モバイル用のスタイル */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: flex;  /* モバイルでは表示 */
+    }
+
+    .sidebar {
+        position: fixed;
+        top: var(--header-height);
+        left: -110%;
+        width: 100%;
+        height: calc(100vh - var(--header-height));
+        background: white;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        padding: 20px;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar.active {
+        left: 0;
+        z-index: 1001;
+    }
+
+    /* メインコンテナのレイアウト調整 */
+    .main-container {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    /* 1カラムレイアウトに変更 */
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    /* 右カラムの幅調整 */
+    .right-column {
+        width: 100%;
+    }
+
+    /* チャットモーダルのサイズ調整 */
+    .ai-chat-modal {
+        width: 90%;
+        height: 80vh;
+        right: 5%;
+        bottom: 10vh;
+    }
+
+    /* FABボタンの位置調整 */
+    .fab-container {
+        position: fixed;
+        bottom: 20px;
+        right: 25px;
+    }
+
+    /* アクションバッジを非表示 */
+    .action-badge {
+        display: none;
+    }
+
+    /* ヘッダー内のドロップダウンを非表示 */
+    .header-right .header-dropdown {
+        display: none;
+    }
+
+    /* サイドバー内のドロップダウンを表示 */
+    .sidebar-dropdown {
+        display: block;
+        width: 80%;
+    }
+
+    /* ヘッダーレイアウトの調整 */
+    .header {
+        display: grid;
+        grid-template-columns: auto 1fr;  /* 左・中央の2列 */
+        padding: 0 16px;
+        position: relative;
+    }
+
+    .header-left {
+        width: 40px;  /* ハンバーガーメニューの幅 */
+        display: flex;  /* 追加 */
+        align-items: center;  /* 追加 */
+    }
+
+    /* ロゴのスタイルを修正 */
+    .header-left .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: block;  /* 追加 */
+    }
+
+    /* 不要なスタイルを削除 */
+    .logo {
+        margin: 0;
+    }
+
+    .fab-text {
+        display: none;
+    }
 } 

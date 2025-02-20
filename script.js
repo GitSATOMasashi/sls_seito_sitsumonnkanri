@@ -77,4 +77,22 @@ document.addEventListener('DOMContentLoaded', function() {
             sendMessage();
         }
     });
+
+    // ハンバーガーメニューの制御を追加
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-container');
+
+    hamburgerMenu.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        hamburgerMenu.classList.toggle('active');
+    });
+
+    // メインコンテンツクリックでメニューを閉じる
+    mainContent.addEventListener('click', function() {
+        if (sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+        }
+    });
 }); 

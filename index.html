@@ -10,6 +10,11 @@
     <!-- ヘッダー -->
     <header class="header">
         <div class="header-left">
+            <button class="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <h1 class="logo">
                 <img src="https://utagesystem.s3.ap-northeast-1.amazonaws.com/GYbKT7Y9d0eR/v21k0xxYM86HKL31LN1fgIk7ZOzJ0FzbXYQ7AaPh.png" 
                      alt="Success-Learning.AI" 
@@ -20,12 +25,17 @@
             <select class="header-dropdown">
                 <option>アドプロ</option>
             </select>
-            <button class="profile-button">P</button>
         </div>
     </header>
 
     <!-- サイドバー -->
     <nav class="sidebar">
+        <!-- ドロップダウン用のコンテナ -->
+        <div class="sidebar-dropdown">
+            <select class="header-dropdown mobile">
+                <option>アドプロ</option>
+            </select>
+        </div>
         <ul class="nav-list">
             <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -187,7 +197,7 @@
             <img src="https://utagesystem.s3.ap-northeast-1.amazonaws.com/GYbKT7Y9d0eR/wDZHdek8ov6aehIlj9Dq3aQKUu5xMzKmHlOtdnLq.png" 
                  alt="ヒント" 
                  class="fab-icon">
-            <span class="fab-text">ヒント</span>
+            <span class="fab-text">質問する</span>
         </button>
         
         <div class="fab-menu" id="fabMenu">

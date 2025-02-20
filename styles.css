@@ -576,13 +576,17 @@ body {
 .ai-assistant-fab {
     position: relative;
     padding: 12px 20px;
-    background: var(--primary);
+    background: linear-gradient(
+        45deg,
+        #EE7800,    /* ベースのオレンジ */
+        #FF9838     /* やや明るいオレンジ */
+    );
     border: none;
     border-radius: 100px;
     color: white;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(238, 120, 0, 0.3);  /* シャドウの色も調整 */
     transition: all 0.3s ease;
     z-index: 2;
     display: flex;
@@ -591,7 +595,7 @@ body {
 
 .fab-icon {
     width: 25px;
-    height: 25px;
+    height: 23px;
     margin-right: 2px;
     filter: brightness(0) invert(1);  /* 白色に変換するだけ */
 }
@@ -604,7 +608,12 @@ body {
 /* ホバー効果 */
 .ai-assistant-fab:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 16px rgba(238, 120, 0, 0.4);
+    background: linear-gradient(
+        45deg,
+        #D66E00,    /* やや濃いオレンジ */
+        #EE7800     /* ベースのオレンジ */
+    );
 }
 
 /* FABメニュー */
@@ -629,23 +638,94 @@ body {
     pointer-events: all;
 }
 
-/* メニュー項目 */
+/* メニュー項目のベーススタイル */
 .fab-menu-item {
-    padding: 12px 20px;
+    padding: 16px 20px;
     background: white;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 50px;
     color: var(--text-primary);
     font-size: 14px;
     cursor: pointer;
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
 }
 
-.fab-menu-item:hover {
+/* 推奨オプションのスタイル */
+.fab-menu-item[data-action="easier"] {
+    background: white;
+    color: var(--text-primary);
+    border: none;
+    position: relative;
+    padding: 16px 24px;
+    overflow: visible;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    text-align: center;
+}
+
+/* 外側のボーダーアニメーション */
+.fab-menu-item[data-action="easier"]::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: linear-gradient(
+        45deg,
+        #FFA63D 0%,
+        #FFD66B 25%,
+        #FFA63D 50%,
+        #FFD66B 75%,
+        #FFA63D 100%
+    );
+    border-radius: 50px;
+    z-index: -1;
+    animation: borderTravel 8s linear infinite;
+    background-size: 300% 100%;
+}
+
+/* 白い背景レイヤー */
+.fab-menu-item[data-action="easier"]::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: white;
+    border-radius: 50px;
+    z-index: -1;
+}
+
+/* アニメーション */
+@keyframes borderTravel {
+    0% { background-position: 100% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ホバー効果 */
+.fab-menu-item[data-action="easier"]:hover {
+    transform: translateY(-2px);
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* その他のメニュー項目 */
+.fab-menu-item:not([data-action="easier"]) {
+    background: white;
+    color: var(--text-primary);
+}
+
+.fab-menu-item:not([data-action="easier"]):hover {
     background: var(--bg-light);
-    transform: translateX(-4px);
 }
 
 /* オーバーレイ */

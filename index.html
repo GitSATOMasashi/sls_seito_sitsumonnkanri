@@ -166,17 +166,43 @@
                 <!-- 質問セクション -->
                 <div class="question-section">
                     <h3 class="question-title">理解できましたか？</h3>
-                    <p class="question-description">わからない場合は、チャットで質問してみましょう！</p>
                     <div class="question-buttons">
-                        <button class="level-down-button">レベルを下げる</button>
-                        <button class="ask-instructor-button">講師に質問する</button>
-                        <button class="ask-littlemind-button">リトル三上くんと進める</button>
-                        <button class="view-history-button">質問履歴を確認する</button>
+                        <button class="instructor-button">
+                            <div class="button-content">
+                                <span class="button-title">講師に質問する</span>
+                            </div>
+                        </button>
+                        <button class="level-adjust-button">
+                            レベルを下げる
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- 固定AIアシスタントボタン -->
+    <div class="fab-container">
+        <button class="ai-assistant-fab" id="fabButton">
+            <img src="https://utagesystem.s3.ap-northeast-1.amazonaws.com/GYbKT7Y9d0eR/wDZHdek8ov6aehIlj9Dq3aQKUu5xMzKmHlOtdnLq.png" 
+                 alt="ヒント" 
+                 class="fab-icon">
+            <span class="fab-text">ヒント</span>
+        </button>
+        
+        <div class="fab-menu" id="fabMenu">
+            <button class="fab-menu-item" data-action="easier">
+                <span class="fab-menu-text">より簡単なアクションがあります</span>
+            </button>
+            <button class="fab-menu-item" data-action="instructor">
+                <span class="fab-menu-text">講師に質問する</span>
+            </button>
+            <button class="fab-menu-item" data-action="ai">
+                <span class="fab-menu-text">AIと一緒に進める</span>
+            </button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html> 

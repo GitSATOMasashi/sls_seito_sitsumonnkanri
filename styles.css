@@ -258,44 +258,105 @@ body {
     background: #F3F0FF;
     border-radius: 16px;
     padding: 32px 24px;
-    text-align: center;
+    display: none;
 }
 
 .question-title {
     font-size: 20px;
-    font-weight: normal;
-    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 24px;  /* マージンを増やす */
+    text-align: center;
 }
 
 .question-description {
     color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 24px;
+    text-align: center;
 }
 
 .question-buttons {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
-.question-buttons button {
-    padding: 14px;
-    background: white;
-    border: 1px solid #E9ECEF;
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 14px;
+/* メインのAIサポートボタン */
+.ai-support-button {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--primary);
+    border: none;
+    border-radius: 12px;
+    color: white;
     cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    text-align: left;
 }
 
-.view-history-button {
+.ai-support-button:hover {
+    background: #3651C0;
+}
+
+/* 講師質問ボタン */
+.instructor-button {
+    display: block;  /* flexからblockに変更 */
+    width: 100%;
+    max-width: 300px;  /* 最大幅を設定 */
+    margin: 0 auto;  /* 中央揃え */
+    padding: 16px 24px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: center;  /* テキストを中央揃え */
+}
+
+.instructor-button:hover {
+    background: var(--bg-light);
+}
+
+/* レベル調整リンク */
+.level-adjust-button {
+    display: block;
+    width: fit-content;  /* コンテンツに合わせる */
+    margin: 0 auto;  /* 上部に余白を追加、中央揃え */
+    background: none;
+    border: none;
     color: var(--text-secondary);
-    background: none !important;
-    border: none !important;
+    font-size: 14px;
+    padding: 8px;
+    cursor: pointer;
     text-decoration: underline;
-    font-size: 13px;
-    margin-top: 8px;
+}
+
+/* ボタン内の共通スタイル */
+.button-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.button-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.button-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.button-description {
+    font-size: 12px;
+    opacity: 0.8;
 }
 
 /* ヘッダー */
@@ -501,4 +562,107 @@ body {
     color: var(--text-secondary);
     line-height: 1.6;
     margin: 0;
+}
+
+/* FABメニューコンテナ */
+.fab-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+}
+
+/* メインFABボタン */
+.ai-assistant-fab {
+    position: relative;
+    padding: 12px 20px;
+    background: var(--primary);
+    border: none;
+    border-radius: 100px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+}
+
+.fab-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 2px;
+    filter: brightness(0) invert(1);  /* 白色に変換するだけ */
+}
+
+.fab-text {
+    font-size: 14px;
+    letter-spacing: 0.5px;  /* 読みやすさ向上 */
+}
+
+/* ホバー効果 */
+.ai-assistant-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* FABメニュー */
+.fab-menu {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* メニュー表示時のスタイル */
+.fab-menu.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+/* メニュー項目 */
+.fab-menu-item {
+    padding: 12px 20px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.fab-menu-item:hover {
+    background: var(--bg-light);
+    transform: translateX(-4px);
+}
+
+/* オーバーレイ */
+.fab-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.fab-overlay.active {
+    opacity: 1;
+    pointer-events: all;
 } 

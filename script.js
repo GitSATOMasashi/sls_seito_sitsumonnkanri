@@ -95,4 +95,24 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburgerMenu.classList.remove('active');
         }
     });
+
+    // チェックリストモーダルの制御
+    const checklistButton = document.getElementById('checklistButton');
+    const checklistModal = document.querySelector('.checklist-modal');
+    const closeChecklistButton = document.querySelector('.close-checklist-button');
+
+    checklistButton.addEventListener('click', function() {
+        checklistModal.classList.add('active');
+    });
+
+    closeChecklistButton.addEventListener('click', function() {
+        checklistModal.classList.remove('active');
+    });
+
+    // モーダル外クリックで閉じる
+    checklistModal.addEventListener('click', function(e) {
+        if (e.target === checklistModal) {
+            checklistModal.classList.remove('active');
+        }
+    });
 }); 

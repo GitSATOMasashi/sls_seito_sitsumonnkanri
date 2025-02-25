@@ -49,7 +49,7 @@ body {
 
 /* ページヘッダー */
 .page-header {
-    margin-bottom: 32px;
+    margin-bottom: 10px;
     margin-top: 1rem;
 }
 
@@ -600,45 +600,46 @@ body {
 /* メインFABボタン */
 .ai-assistant-fab {
     position: relative;
-    padding: 15px 25px;
+    padding: 12px 25px;
     background: linear-gradient(
-        45deg,
-        #EE7800,    /* ベースのオレンジ */
-        #FF9838     /* やや明るいオレンジ */
+        135deg,
+        #3d61f8,
+        #3e56c9
     );
     border: none;
     border-radius: 100px;
     color: white;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(238, 120, 0, 0.3);  /* シャドウの色も調整 */
+    box-shadow: 0 4px 12px rgba(68, 97, 219, 0.3);
     transition: all 0.3s ease;
     z-index: 2;
     display: flex;
     align-items: center;
 }
 
+/* ボタンのアクティブ状態とフォーカス状態のスタイルを追加 */
+.ai-assistant-fab:active,
+.ai-assistant-fab:focus {
+    background: linear-gradient(
+        135deg,
+        #3d61f8,
+        #3e56c9
+    );
+    outline: none;  /* フォーカス時のアウトラインを削除 */
+}
+
 .fab-icon {
-    width: 25px;
-    height: 23px;
+    width: 30px;
+    height: 30px;
     margin-right: 2px;
-    filter: brightness(0) invert(1);  /* 白色に変換するだけ */
+    margin-top: -5px;  /* 上に2px移動 */
+    filter: brightness(0) invert(1);
 }
 
 .fab-text {
     font-size: 14px;
     letter-spacing: 0.5px;  /* 読みやすさ向上 */
-}
-
-/* ホバー効果 */
-.ai-assistant-fab:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(238, 120, 0, 0.4);
-    background: linear-gradient(
-        45deg,
-        #D66E00,    /* やや濃いオレンジ */
-        #EE7800     /* ベースのオレンジ */
-    );
 }
 
 /* FABメニュー */
@@ -705,11 +706,11 @@ body {
     bottom: -4px;
     background: linear-gradient(
         45deg,
-        #FFA63D 0%,
-        #FFD66B 25%,
-        #FFA63D 50%,
-        #FFD66B 75%,
-        #FFA63D 100%
+        #3d61f8 0%,
+        #5a7aff 25%,
+        #3d61f8 50%,
+        #5a7aff 75%,
+        #3d61f8 100%
     );
     border-radius: 50px;
     z-index: -1;
@@ -1015,5 +1016,207 @@ body {
 
     .fab-text {
         display: none;
+    }
+
+    .fab-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: -6px;
+        margin-top: -4px;
+        filter: brightness(0) invert(1);
+    }
+    
+    .ai-assistant-fab {
+        padding: 18px 30px;
+        background: linear-gradient(
+            135deg,
+            #3d61f8,
+            #3e56c9
+        );
+    }
+}
+
+/* チェックリストFABのスタイル */
+.checklist-fab-container {
+    display: none;  /* デフォルトは非表示 */
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);  /* 中央揃え */
+    z-index: 1000;
+}
+
+.checklist-fab {
+    padding: 12px 40px;
+    background: linear-gradient(45deg, #FFD66B, #FFA63D);
+    border: none;
+    border-radius: 100px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 166, 61, 0.3);
+    transition: all 0.3s ease;
+    min-width: 160px;
+    height: auto;      /* コンテンツに応じて高さを自動調整 */
+}
+
+/* チェックリストモーダル */
+.checklist-modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.checklist-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.checklist-modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.checklist-modal.active .checklist-modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.close-checklist-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e5e5e5;
+    border: none;
+    font-size: 24px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 20px;
+    width: 36px;          /* 幅を指定 */
+    height: 36px;         /* 高さを指定 */
+    display: flex;        /* フレックスボックスを使用 */
+    align-items: center;  /* 垂直方向中央揃え */
+    justify-content: center; /* 水平方向中央揃え */
+    padding: 0;           /* パディングをリセット */
+    line-height: 1;       /* 行の高さを調整 */
+}
+
+/* チェックリストモーダルのスタイル調整 */
+.checklist-modal .checklist-title {
+    background: linear-gradient(to right, #FFD66B, #FFA63D);
+    padding: 15px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 16px 0;
+    border-radius: 8px;
+}
+
+.checklist-modal .checklist {
+    margin: 16px 0;
+}
+
+.checklist-modal .next-action-button {
+    width: 80%;
+    padding: 16px;
+    background: #E9ECEF;
+    border: none;
+    border-radius: 100px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    margin: 16px auto;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: block;
+}
+
+/* モバイル用のスタイル */
+@media (max-width: 768px) {
+    /* 既存のチェックリストを非表示 */
+    .checklist-section {
+        display: none;
+    }
+
+    /* チェックリストFABを表示 */
+    .checklist-fab-container {
+        display: block;
+    }
+
+    /* FABボタンの位置調整（既存のスタイル） */
+    .fab-container {
+        bottom: 20px;
+        right: 25px;
+    }
+
+    /* チェックリストFABの位置調整 */
+    .checklist-fab-container {
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .checklist-fab {
+        padding: 18px 32px;  /* モバイルでは左右のパディングを少し小さく */
+        min-width: 12rem;    /* モバイルでは最小幅を小さく */
+    }
+}
+
+/* 戻るボタンのスタイル - アウトラインボタン */
+.back-to-map-button {
+    display: flex;
+    align-items: center;
+    color: #747474;
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 16px;
+    transition: all 0.2s;
+    padding: 10px 20px;
+    border: 1px solid #747474;
+    border-radius: 30px;
+    background-color: transparent;
+    width: fit-content;
+}
+
+.back-to-map-button:hover {
+    background-color: rgba(45, 59, 128, 0.05);
+}
+
+.back-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    fill: currentColor;
+}
+
+/* モバイル用のスタイル調整 */
+@media (max-width: 768px) {
+    .back-to-map-button {
+        margin-top: 20px;
+        font-size: 13px;
+        padding: 6px 12px;
     }
 } 

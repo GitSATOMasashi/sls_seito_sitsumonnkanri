@@ -134,10 +134,20 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePaginationInfo();
     }
 
-    // ページネーション情報の更新
-    function updatePaginationInfo() {
-        const startItem = (currentPage - 1) * itemsPerPage + 1;
-        const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+    // ページネーション情報の更新関数（統合版）
+    function updatePaginationInfo(totalItems, startIndex, endIndex) {
+        // 引数がない場合は古い実装の動作を維持
+        if (arguments.length === 0) {
+            const visibleItems = Array.from(document.querySelectorAll('.question-item')).filter(item => 
+                item.dataset.filteredOut !== 'true' && item.style.display !== 'none'
+            );
+            totalItems = visibleItems.length;
+            startIndex = (currentPage - 1) * itemsPerPage;
+            endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        }
+        
+        const startItem = totalItems > 0 ? startIndex + 1 : 0;
+        const endItem = endIndex;
         
         // ページネーション情報の更新
         const paginationInfo = document.querySelector('.pagination-info');
@@ -155,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (nextButton) {
             const maxPage = Math.ceil(totalItems / itemsPerPage);
-            nextButton.disabled = currentPage >= maxPage;
+            nextButton.disabled = currentPage >= maxPage || totalItems === 0;
         }
         
         console.log('Pagination updated:', startItem, '-', endItem, '/', totalItems);
@@ -259,16 +269,58 @@ document.addEventListener('DOMContentLoaded', function() {
         // 質問送信済みの件数を取得
         const pendingCount = questionData.filter(q => q.type === 'instructor' && q.isPending).length;
         
+        // 既読（未読でなく、質問送信済みでもない講師への質問）の件数を取得
+        const readCount = questionData.filter(q => q.type === 'instructor' && !q.isUnread && !q.isPending).length;
+        
         // サイドバーのカウントを更新
         document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count').textContent = allUnreadCount > 0 ? allUnreadCount : '';
         document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = ''; // AIは常に空
         document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count').textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
         
-        // 質問送信済みタブのカウントを更新
+        // 各フィルタータブのカウントを更新
         const pendingTab = document.querySelector('.filter-tab[data-filter-status="pending"]');
         if (pendingTab) {
             pendingTab.dataset.count = pendingCount;
         }
+        
+        const unreadTab = document.querySelector('.filter-tab[data-filter-status="unread"]');
+        if (unreadTab) {
+            unreadTab.dataset.count = instructorUnreadCount;
+        }
+        
+        const readTab = document.querySelector('.filter-tab[data-filter-status="read"]');
+        if (readTab) {
+            readTab.dataset.count = readCount;
+        }
+        
+        const allTab = document.querySelector('.filter-tab[data-filter-status="all"]');
+        if (allTab) {
+            // すべての講師への質問の数
+            const allInstructorCount = questionData.filter(q => q.type === 'instructor').length;
+            allTab.dataset.count = allInstructorCount;
+        }
+        
+        // フィルタータブのカウント表示を更新
+        updateFilterTabCounts();
+    }
+
+    // フィルタータブのカウント表示を更新する関数
+    function updateFilterTabCounts() {
+        // すべてのフィルタータブを取得
+        const filterTabs = document.querySelectorAll('.filter-tab[data-filter-status]');
+        
+        filterTabs.forEach(tab => {
+            // data-count属性の値を取得
+            const count = tab.dataset.count;
+            
+            // カウントが0より大きい場合のみ表示
+            if (count && parseInt(count) > 0) {
+                tab.setAttribute('data-count', count);
+            } else {
+                // カウントが0の場合は属性を削除または空にする
+                tab.setAttribute('data-count', '0'); // 明示的に0を設定
+            }
+        });
     }
 
     // 「続きを読む」ボタンの機能
@@ -781,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 質問リストを生成する関数を修正
+    // 質問リストを生成する関数
     function renderQuestionList() {
         const questionList = document.querySelector('.question-list');
         
@@ -834,15 +886,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // 総アイテム数
         const totalItems = filteredData.length;
         
+        // 最大ページ数を計算
+        const maxPage = Math.ceil(totalItems / itemsPerPage);
+        
+        // 現在のページが最大ページを超えないようにする
+        if (currentPage > maxPage && maxPage > 0) {
+            currentPage = maxPage;
+        } else if (currentPage < 1 || maxPage === 0) {
+            currentPage = 1;
+        }
+        
         // ページネーション
-        const itemsPerPage = 10;
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
         
         // 現在のページのアイテムを取得
         const currentPageItems = filteredData.slice(startIndex, endIndex);
-        
-        console.log('Showing items', startIndex + 1, 'to', endIndex, 'of', totalItems, 'items');
         
         // 各質問アイテムをレンダリング
         currentPageItems.forEach(question => {
@@ -853,6 +912,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 日付をフォーマット
             const formattedDate = formatDate(question.date);
+            
+            // メッセージプレビューを設定（質問送信済みの場合は冒頭に追加）
+            const messagePreview = question.isPending && question.type === 'instructor'
+                ? `<span class="pending-text">質問送信済み — </span>${question.message}`
+                : question.message;
             
             // HTMLを生成
             const questionHTML = `
@@ -866,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="question-item-content">
                         <div class="action-path">${question.path}</div>
                         <div class="action-name">${question.name}</div>
-                        <div class="message-preview">${question.message}</div>
+                        <div class="message-preview">${messagePreview}</div>
                     </div>
                     
                     <!-- 右側：日付とオプション -->
@@ -897,36 +961,14 @@ document.addEventListener('DOMContentLoaded', function() {
             questionList.innerHTML += questionHTML;
         });
         
+        // 質問アイテムのイベントリスナーを設定
+        setupQuestionItemListeners();
+        
         // ページネーション情報を更新
         updatePaginationInfo(totalItems, startIndex, endIndex);
         
-        // イベントリスナーを設定
-        setupQuestionItemListeners();
-    }
-
-    // ページネーション情報の更新関数
-    function updatePaginationInfo(totalItems, startIndex, endIndex) {
-        const startItem = totalItems > 0 ? startIndex + 1 : 0;
-        const endItem = endIndex;
-        
-        // ページネーション情報の更新
-        const paginationInfo = document.querySelector('.pagination-info');
-        if (paginationInfo) {
-            paginationInfo.textContent = `${startItem}-${endItem} / ${totalItems} 件`;
-        }
-        
-        // ボタンの有効/無効状態の更新
-        const prevButton = document.querySelector('.prev-btn');
-        const nextButton = document.querySelector('.next-btn');
-        
-        if (prevButton) {
-            prevButton.disabled = currentPage <= 1;
-        }
-        
-        if (nextButton) {
-            const maxPage = Math.ceil(totalItems / itemsPerPage);
-            nextButton.disabled = currentPage >= maxPage || totalItems === 0;
-        }
+        // フィルタータブのカウントを更新
+        updateSidebarCounts();
     }
 
     // 質問アイテムのイベントリスナーを設定

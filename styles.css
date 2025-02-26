@@ -798,7 +798,7 @@ body {
 
 /* 質問リストのスクロール */
 .question-list {
-    max-height: calc(100vh - var(--header-height) - 160px);
+    height: calc(100vh - var(--header-height) - 160px);
     overflow-y: auto;
     padding-right: 0px;
     background: white;
@@ -1041,14 +1041,16 @@ body {
 .instructor-status-tabs .filter-tab::after {
     content: attr(data-count);
     display: inline-block;
-    background: #E5E9F2;
-    color: var(--text-secondary);
+    background: var(--primary);
+    color: white;
     border-radius: 12px;
     padding: 2px 8px;
     font-size: 12px;
     margin-left: 8px;
     min-width: 10px;
     text-align: center;
+    position: relative;
+    top: -1px;
 }
 
 .instructor-status-tabs .filter-tab.active::after {
@@ -1216,7 +1218,7 @@ body {
 
 .instructor-status-tabs .filter-tab {
     padding: 8px 16px; /* パディングを調整 */
-    font-size: 13px; /* フォントサイズを小さく */
+    font-size: 12px; /* フォントサイズを小さく */
     white-space: nowrap; /* テキストを折り返さない */
 }
 
@@ -1392,21 +1394,26 @@ body {
     min-width: 20px; /* 既存のカウント表示と同じ幅を確保 */
 }
 
-/* 特定のタブのdata-countを非表示にする */
+/* filter-tabのdata-countが0または空の場合、after疑似要素を非表示にする */
+.filter-tab[data-count="0"]::after,
+.filter-tab[data-count=""]::after,
+.filter-tab:not([data-count])::after {
+    display: none !important;
+}
+
+/* 特定のタブのdata-countを常に非表示にする設定は維持 */
 .filter-tab[data-filter-status="all"]::after,
 .filter-tab[data-filter-status="read"]::after {
     display: none !important;
 }
 
-/* 特定のタブ内のカウント要素を非表示にする（実際の要素を使用している場合） */
-.filter-tab[data-filter-status="all"] .count,
-.filter-tab[data-filter-status="read"] .count {
-    display: none !important;
+/* 質問送信済みテキストのスタイル */
+.pending-text {
+    color: #E67700;
+    font-weight: bold;
 }
 
-/* または、JavaScriptで制御している場合は、特定のタブのdata-count属性を削除する */
-
-/* 質問送信済み状態のスタイル */
-.question-item.pending {
-    background-color: #fff8e6; /* 薄い黄色の背景 */
+/* 質問送信済み状態の質問アイテム */
+.question-item.pending .message-preview {
+    color: var(--text-primary); /* 通常のテキスト色を維持 */
 }

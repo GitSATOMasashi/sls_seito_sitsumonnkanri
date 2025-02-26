@@ -1403,7 +1403,8 @@ body {
 
 /* 特定のタブのdata-countを常に非表示にする設定は維持 */
 .filter-tab[data-filter-status="all"]::after,
-.filter-tab[data-filter-status="read"]::after {
+.filter-tab[data-filter-status="read"]::after,
+.filter-tab[data-filter-status="pending"]::after {
     display: none !important;
 }
 
@@ -1430,4 +1431,9 @@ body {
 /* 未読メッセージ内のハイライト（コントラスト調整） */
 .question-item.unread .search-highlight {
     background-color: rgba(253, 185, 70, 0.5); /* より濃いめのオレンジ */
+}
+
+/* 質問送信済みタブのafter要素を非表示にする */
+.filter-tab[data-filter-status="pending"]::after {
+    display: none !important;
 }

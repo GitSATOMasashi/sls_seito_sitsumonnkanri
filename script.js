@@ -363,24 +363,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 削除ボタンのクリックイベント
     const deleteButtons = document.querySelectorAll('.delete-btn');
-    
     deleteButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            e.stopPropagation(); // 親要素へのクリックイベントの伝播を防止
+            e.stopPropagation();
             
             const questionItem = this.closest('.question-item');
-            const actionName = questionItem.querySelector('.action-name').textContent;
+            const questionId = parseInt(questionItem.dataset.id);
             
-            if (confirm(`「${actionName}」の会話を削除しますか？`)) {
-                console.log('削除しました:', actionName);
-                questionItem.remove();
-                
-                // サイドバーのカウント数を更新
-                updateSidebarCounts();
-            }
+            // 削除確認モーダルを表示
+            showDeleteConfirmModal(questionId);
             
-            // オプションメニューを閉じる
-            this.closest('.question-options').classList.remove('active');
+            // ドロップダウンを閉じる
+            this.closest('.options-dropdown').classList.remove('active');
         });
     });
     
@@ -952,17 +946,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const questionItem = this.closest('.question-item');
                 const questionId = parseInt(questionItem.dataset.id);
                 
-                // データから削除
-                const questionIndex = questionData.findIndex(q => q.id === questionId);
-                if (questionIndex !== -1) {
-                    questionData.splice(questionIndex, 1);
-                    
-                    // リストを再レンダリング
-                    renderQuestionList();
-                    
-                    // サイドバーのカウントを更新
-                    updateSidebarCounts();
-                }
+                // 削除確認モーダルを表示
+                showDeleteConfirmModal(questionId);
+                
+                // ドロップダウンを閉じる
+                this.closest('.options-dropdown').classList.remove('active');
             });
         });
         
@@ -986,15 +974,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // サイドバーのカウントを更新する関数
-    function updateSidebarCounts() {
-        const allCount = questionData.length;
-        const aiCount = questionData.filter(q => q.type === 'ai').length;
-        const instructorCount = questionData.filter(q => q.type === 'instructor').length;
+    // 削除確認モーダルを表示する関数
+    function showDeleteConfirmModal(questionId) {
+        const modal = document.getElementById('deleteConfirmModal');
+        const closeBtn = modal.querySelector('.modal-close-btn');
+        const cancelBtn = modal.querySelector('.modal-cancel-btn');
+        const confirmBtn = modal.querySelector('.modal-confirm-btn');
         
-        document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count').textContent = allCount;
-        document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = aiCount;
-        document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count').textContent = instructorCount;
+        // モーダルを表示
+        modal.classList.add('active');
+        
+        // 閉じるボタンのイベント
+        closeBtn.onclick = function() {
+            modal.classList.remove('active');
+        };
+        
+        // キャンセルボタンのイベント
+        cancelBtn.onclick = function() {
+            modal.classList.remove('active');
+        };
+        
+        // 確認ボタンのイベント
+        confirmBtn.onclick = function() {
+            // 質問を削除
+            deleteQuestion(questionId);
+            
+            // モーダルを閉じる
+            modal.classList.remove('active');
+        };
+        
+        // モーダル外クリックで閉じる
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.classList.remove('active');
+            }
+        };
+    }
+
+    // 質問を削除する関数
+    function deleteQuestion(id) {
+        const questionIndex = questionData.findIndex(q => q.id === id);
+        
+        if (questionIndex !== -1) {
+            // データから削除
+            questionData.splice(questionIndex, 1);
+            
+            // リストを再レンダリング
+            renderQuestionList();
+            
+            // サイドバーのカウントを更新
+            updateSidebarCounts();
+        }
     }
 
     // 質問リストを生成

@@ -676,11 +676,6 @@ body {
     font-weight: normal;
 }
 
-.badge-pending {
-    background-color: #FFF4E5;
-    color: #E67700;
-}
-
 .badge-answered {
     background-color: #E6F4EA;
     color: #137333;
@@ -1052,7 +1047,7 @@ body {
     padding: 2px 8px;
     font-size: 12px;
     margin-left: 8px;
-    min-width: 16px;
+    min-width: 10px;
     text-align: center;
 }
 
@@ -1175,6 +1170,7 @@ body {
     position: relative; /* 子要素の配置の基準点 */
     border-bottom: 1px solid #E5E9F2; /* 薄いボーダーを追加 */
     z-index: 10; /* 質問リストより上に表示 */
+    padding-bottom: 4px;
 }
 
 /* スクロール時のボーダー表示 */
@@ -1394,4 +1390,23 @@ body {
 .sidebar-count:empty {
     display: inline-block;
     min-width: 20px; /* 既存のカウント表示と同じ幅を確保 */
+}
+
+/* 特定のタブのdata-countを非表示にする */
+.filter-tab[data-filter-status="all"]::after,
+.filter-tab[data-filter-status="read"]::after {
+    display: none !important;
+}
+
+/* 特定のタブ内のカウント要素を非表示にする（実際の要素を使用している場合） */
+.filter-tab[data-filter-status="all"] .count,
+.filter-tab[data-filter-status="read"] .count {
+    display: none !important;
+}
+
+/* または、JavaScriptで制御している場合は、特定のタブのdata-count属性を削除する */
+
+/* 質問送信済み状態のスタイル */
+.question-item.pending {
+    background-color: #fff8e6; /* 薄い黄色の背景 */
 }

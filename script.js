@@ -251,15 +251,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // サイドバーのカウント数を更新する関数
     function updateSidebarCounts() {
-        // 未読メッセージの件数を取得
+        // 未読メッセージの件数を取得（AIチャットは除外）
         const allUnreadCount = questionData.filter(q => q.isUnread).length;
-        const aiUnreadCount = questionData.filter(q => q.type === 'ai' && q.isUnread).length;
+        const aiUnreadCount = 0; // AIチャットは常に既読なので0
         const instructorUnreadCount = questionData.filter(q => q.type === 'instructor' && q.isUnread).length;
+        
+        // 質問送信済みの件数を取得
+        const pendingCount = questionData.filter(q => q.type === 'instructor' && q.isPending).length;
         
         // サイドバーのカウントを更新
         document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count').textContent = allUnreadCount > 0 ? allUnreadCount : '';
-        document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = aiUnreadCount > 0 ? aiUnreadCount : '';
+        document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = ''; // AIは常に空
         document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count').textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
+        
+        // 質問送信済みタブのカウントを更新
+        const pendingTab = document.querySelector('.filter-tab[data-filter-status="pending"]');
+        if (pendingTab) {
+            pendingTab.dataset.count = pendingCount;
+        }
     }
 
     // 「続きを読む」ボタンの機能
@@ -638,7 +647,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Reactコンポーネント設計",
             message: "Reactコンポーネントの設計について質問があります。再利用可能なコンポーネントを作成する際のベストプラクティスを教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 3)), // 3日前
-            isUnread: false
+            isUnread: false, // AIチャットは常に既読
+            isPending: false
         },
         {
             id: 2,
@@ -647,7 +657,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "教師あり学習の基礎",
             message: "教師あり学習のアルゴリズムについて質問があります。分類と回帰の違いについて詳しく教えていただけますか？",
             date: new Date(new Date().setDate(new Date().getDate() - 5)), // 5日前
-            isUnread: true
+            isUnread: true,
+            isPending: false // 講師から回答済み
         },
         {
             id: 3,
@@ -656,7 +667,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "配列操作のベストプラクティス",
             message: "JavaScriptの配列操作について質問があります。map, filter, reduceの使い分けについて教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 7)), // 1週間前
-            isUnread: false
+            isUnread: false, // AIチャットは常に既読
+            isPending: false
         },
         {
             id: 4,
@@ -665,7 +677,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "複雑なJOINクエリの書き方",
             message: "複数テーブルを結合する複雑なSQLクエリの書き方について質問があります。特にパフォーマンスを考慮した方法を教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 14)), // 2週間前
-            isUnread: false
+            isUnread: false,
+            isPending: false
         },
         {
             id: 5,
@@ -674,7 +687,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "レスポンシブデザインのベストプラクティス",
             message: "モバイルファーストのレスポンシブデザインについて質問があります。異なる画面サイズに対応するための効果的な方法を教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 2)), // 2日前
-            isUnread: true
+            isUnread: true,
+            isPending: false
         },
         {
             id: 6,
@@ -683,7 +697,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "S3とEC2の連携方法",
             message: "AWSのS3とEC2を連携させる方法について質問があります。特にセキュリティを考慮した設定方法を教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 10)), // 10日前
-            isUnread: false
+            isUnread: false,
+            isPending: true // 質問送信済み、講師からの回答待ち
         },
         {
             id: 7,
@@ -692,7 +707,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "二分探索の実装方法",
             message: "二分探索アルゴリズムの実装について質問があります。特にエッジケースの処理方法について詳しく教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 1)), // 1日前
-            isUnread: true
+            isUnread: true,
+            isPending: false
         },
         {
             id: 8,
@@ -701,7 +717,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "XSS攻撃の防止方法",
             message: "クロスサイトスクリプティング（XSS）攻撃を防ぐための効果的な方法について質問があります。具体的な実装例も含めて教えていただけますか？",
             date: new Date(new Date().setDate(new Date().getDate() - 4)), // 4日前
-            isUnread: false
+            isUnread: false,
+            isPending: false
         },
         {
             id: 9,
@@ -710,7 +727,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "非同期処理のベストプラクティス",
             message: "Node.jsにおける非同期処理のベストプラクティスについて質問があります。Promise, async/awaitの効果的な使い方を教えてください。",
             date: new Date(new Date().setHours(new Date().getHours() - 5)), // 5時間前
-            isUnread: false
+            isUnread: false,
+            isPending: false
         },
         {
             id: 10,
@@ -719,7 +737,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "ネイティブモジュールの統合方法",
             message: "React Nativeでネイティブモジュールを統合する方法について質問があります。iOSとAndroid両方に対応する方法を教えてください。",
             date: new Date(new Date().setHours(new Date().getHours() - 2)), // 2時間前
-            isUnread: true
+            isUnread: true,
+            isPending: false
         },
         {
             id: 11,
@@ -728,7 +747,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "GitHubActionsの設定方法",
             message: "GitHub Actionsを使ったCI/CDパイプラインの設定方法について質問があります。特にテストと自動デプロイの設定例を教えてください。",
             date: new Date(new Date().setMinutes(new Date().getMinutes() - 30)), // 30分前
-            isUnread: true
+            isUnread: true,
+            isPending: false
         },
         {
             id: 12,
@@ -737,7 +757,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "スクラムの効果的な導入方法",
             message: "小規模チームにスクラム開発手法を導入する効果的な方法について質問があります。特に初めての導入時の注意点を教えてください。",
             date: new Date(), // 現在（たった今）
-            isUnread: true
+            isUnread: true,
+            isPending: false
         }
     ];
 
@@ -781,6 +802,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // フィルタリング条件に基づいてデータをフィルタリング
         let filteredData = [...questionData];
         
+        // AIチャットはすべて既読状態に設定
+        filteredData.forEach(question => {
+            if (question.type === 'ai') {
+                question.isUnread = false;
+            }
+        });
+        
         // タイプフィルター
         if (activeType !== 'all') {
             filteredData = filteredData.filter(q => q.type === activeType);
@@ -791,11 +819,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (activeStatus === 'unread') {
                 filteredData = filteredData.filter(q => q.isUnread);
             } else if (activeStatus === 'read') {
-                filteredData = filteredData.filter(q => !q.isUnread);
+                filteredData = filteredData.filter(q => !q.isUnread && !q.isPending);
             } else if (activeStatus === 'pending') {
-                // 質問送信済みの条件を定義（例：特定のフラグがある場合）
-                // この例では単純に講師宛ての質問すべてを「送信済み」とみなします
-                filteredData = filteredData.filter(q => q.type === 'instructor');
+                filteredData = filteredData.filter(q => q.isPending);
             }
         }
         
@@ -808,21 +834,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 総アイテム数
         const totalItems = filteredData.length;
         
-        // 最大ページ数を計算
-        const maxPage = Math.ceil(totalItems / itemsPerPage);
-        
-        // 現在のページが最大ページを超えないようにする
-        if (currentPage > maxPage && maxPage > 0) {
-            currentPage = maxPage;
-        } else if (currentPage < 1 || maxPage === 0) {
-            currentPage = 1;
-        }
-        
-        console.log('Current page:', currentPage, 'of', maxPage, 'pages');
-        
-        // 現在のページに表示するアイテムを取得
+        // ページネーション
+        const itemsPerPage = 10;
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        
+        // 現在のページのアイテムを取得
         const currentPageItems = filteredData.slice(startIndex, endIndex);
         
         console.log('Showing items', startIndex + 1, 'to', endIndex, 'of', totalItems, 'items');
@@ -832,6 +849,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 質問アイテムのクラスを設定
             let itemClasses = 'question-item';
             if (question.isUnread) itemClasses += ' unread';
+            if (question.isPending && question.type === 'instructor') itemClasses += ' pending';
             
             // 日付をフォーマット
             const formattedDate = formatDate(question.date);
@@ -1021,6 +1039,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // 講師からの回答を受け取る関数
+    function receiveInstructorAnswer(questionId, answerData) {
+        const questionIndex = questionData.findIndex(q => q.id === questionId);
+        
+        if (questionIndex !== -1) {
+            // 質問のステータスを更新
+            questionData[questionIndex].isPending = false; // 質問送信済み状態を解除
+            questionData[questionIndex].isUnread = true; // 未読状態にする
+            
+            // 回答データを追加（実際の実装に合わせて調整）
+            // questionData[questionIndex].answers = [...(questionData[questionIndex].answers || []), answerData];
+            
+            // リストを再レンダリング
+            renderQuestionList();
+            
+            // サイドバーのカウントを更新
+            updateSidebarCounts();
+        }
+    }
+
     // 質問リストを生成
     renderQuestionList();
     
@@ -1092,7 +1130,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "タイトル未設定",
             message: "質問内容がここに表示されます。",
             date: new Date(), // 現在の日時
-            isUnread: true
+            isUnread: false, // AIチャットは常に既読
+            isPending: false // デフォルトはfalse
         };
         
         // データに追加
@@ -1152,6 +1191,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // フィルタリング条件に基づいてデータをフィルタリング
         let filteredData = [...questionData];
         
+        // AIチャットはすべて既読状態に設定
+        filteredData.forEach(question => {
+            if (question.type === 'ai') {
+                question.isUnread = false;
+            }
+        });
+        
         // タイプフィルター
         if (activeType !== 'all') {
             filteredData = filteredData.filter(q => q.type === activeType);
@@ -1162,10 +1208,42 @@ document.addEventListener('DOMContentLoaded', function() {
             if (activeStatus === 'unread') {
                 filteredData = filteredData.filter(q => q.isUnread);
             } else if (activeStatus === 'read') {
-                filteredData = filteredData.filter(q => !q.isUnread);
+                filteredData = filteredData.filter(q => !q.isUnread && !q.isPending);
+            } else if (activeStatus === 'pending') {
+                filteredData = filteredData.filter(q => q.isPending);
             }
         }
         
         return filteredData.length;
+    }
+
+    // 講師への質問を追加する関数
+    function addInstructorQuestion(questionData) {
+        // 新しいIDを生成（既存の最大ID + 1）
+        const maxId = Math.max(...questionData.map(q => q.id), 0);
+        const newId = maxId + 1;
+        
+        // 新しい質問オブジェクトを作成
+        const newQuestion = {
+            id: newId,
+            type: "instructor",
+            path: "講師への質問",
+            name: "タイトル未設定",
+            message: "質問内容がここに表示されます。",
+            date: new Date(), // 現在の日時
+            isUnread: false, // 講師からの回答がまだないので未読ではない
+            isPending: true // 質問送信済み状態
+        };
+        
+        // データに追加
+        questionData.unshift(newQuestion); // 先頭に追加
+        
+        // リストを再レンダリング
+        renderQuestionList();
+        
+        // サイドバーのカウントを更新
+        updateSidebarCounts();
+        
+        return newId; // 新しい質問のIDを返す
     }
 }); 

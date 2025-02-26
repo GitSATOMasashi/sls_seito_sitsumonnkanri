@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Success-Learning.AI</title>
+    <title>質問管理 - Success-Learning.AI</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
         </div>
         <div class="header-right">
             <select class="header-dropdown">
-                <option>アドプロ</option>
+                <option>スキルプラス</option>
             </select>
         </div>
     </header>
@@ -33,7 +33,7 @@
         <!-- ドロップダウン用のコンテナ -->
         <div class="sidebar-dropdown">
             <select class="header-dropdown mobile">
-                <option>アドプロ</option>
+                <option>スキルプラス</option>
             </select>
         </div>
         <ul class="nav-list">
@@ -65,7 +65,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link active">
                     <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                     </svg>
@@ -97,179 +97,72 @@
     <!-- メインコンテンツ -->
     <div class="main-container">
         <div class="page-header">
-            <h1 class="page-title">ネクストアクション</h1>
-            <div class="page-path">
-                <span>ハイクラス営業に入れるようになる</span>
-                <span>ハイクラスのクロージングを習得</span>
-            </div>
-            <a href="#" class="back-to-map-button">
-                <svg class="back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-                アクションマップに戻る
-            </a>
-        </div>
-        <div class="main-content">
-            <!-- 左カラム - 講義内容 -->
-            <div class="lecture-content">
-
-                <div class="action-box">
-                    <h3 class="action-title">
-                        ハイクラスのクロージングを習得
-                        <span class="action-badge">実行可能</span>
-                    </h3>
-                    <div class="action-content"><div class="lecture-section">
-                            <div class="lecture-point">
-                                <span class="point-number">1</span>
-                                <div class="point-content">
-                                    <h5>顧客の課題に寄り添う</h5>
-                                    <p>商品説明ではなく、顧客が抱える本質的な課題に焦点を当てましょう。「このサービスを使うことで、あなたのこんな課題が解決できます」という形で提案します。</p>
-                                </div>
-                            </div>
-                            <div class="lecture-point">
-                                <span class="point-number">2</span>
-                                <div class="point-content">
-                                    <h5>具体的な成功イメージを共有</h5>
-                                    <p>導入後の具体的なメリットを、数値や事例を交えて説明します。「〇〇様の場合、3ヶ月で売上が30%向上しました」といった具体例が効果的です。</p>
-                                </div>
-                            </div>
-                            <div class="lecture-point">
-                                <span class="point-number">3</span>
-                                <div class="point-content">
-                                    <h5>感情に訴えかける</h5>
-                                    <p>ロジックだけでなく、導入後の未来をポジティブに想像できるようなストーリーを組み立てましょう。</p>
-                                </div>
-                            </div>
-                            <div class="action-items">
-                                <div class="action-item">
-                                    <span class="action-item-icon">▶</span>
-                                    <span class="action-item-text">商品説明は絶対NG！</span>
-                                </div>
-                                <div class="action-item">
-                                    <span class="action-item-icon">▶</span>
-                                    <span class="action-item-text">ベネフィット＝プラスの感情を得られる未来のこと</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 右カラム -->
-            <div class="right-column">
-                <!-- セルフチェック -->
-                <div class="checklist-section">
-                    <h3 class="checklist-title">セルフチェック</h3>
-                    <div class="checklist">
-                        <div class="check-item">
-                            <div class="check-item-content">
-                                <label for="check1">ハイクラスのスクール内容を1人で語れる</label>
-                                
-                            </div>
-                            <input type="checkbox" id="check1">
-                        </div>
-                        <div class="check-item">
-                            <div class="check-item-content">
-                                <label for="check2">マネージャーから合格をもらう</label>
-                                
-                            </div>
-                            <input type="checkbox" id="check2">
-                        </div>
-                    </div>
-                    <button class="next-action-button">次のアクションに進む</button>
-                </div>
-
-                <!-- 質問セクション -->
-                <div class="question-section">
-                    <h3 class="question-title">理解できましたか？</h3>
-                    <div class="question-buttons">
-                        <button class="instructor-button">
-                            <div class="button-content">
-                                <span class="button-title">講師に質問する</span>
-                            </div>
-                        </button>
-                        <button class="level-adjust-button">
-                            レベルを下げる
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 固定AIアシスタントボタン -->
-    <div class="fab-container">
-        <button class="ai-assistant-fab" id="fabButton">
-            <img src="raising-hand-for-question-svgrepo-com.png" 
-                 alt="質問" 
-                 class="fab-icon">
-            <span class="fab-text">質問する</span>
-        </button>
-        
-        <div class="fab-menu" id="fabMenu">
-            <button class="fab-menu-item" data-action="easier">
-                <span class="fab-menu-text">より簡単なアクションがあります</span>
-            </button>
-            <button class="fab-menu-item" data-action="ai">
-                <span class="fab-menu-text">AIと一緒に進める</span>
-            </button>
-            <button class="fab-menu-item" data-action="instructor">
-                <span class="fab-menu-text">講師に質問する</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- オーバーレイ -->
-    <div class="fab-overlay"></div>
-
-    <!-- チェックリストボタン（モバイル用） -->
-    <div class="checklist-fab-container">
-        <button class="checklist-fab" id="checklistButton">
-            <span class="checklist-fab-text">次へ進む</span>
-        </button>
-    </div>
-
-    <!-- チェックリストモーダル -->
-    <div class="checklist-modal">
-        <div class="checklist-modal-content">
-            <button class="close-checklist-button">×</button>
-            <h3 class="checklist-title">セルフチェック</h3>
-            <div class="checklist">
-                <div class="check-item">
-                    <div class="check-item-content">
-                        <label for="check1-modal">ハイクラスのスクール内容を1人で語れる</label>
-                    </div>
-                    <input type="checkbox" id="check1-modal">
-                </div>
-                <div class="check-item">
-                    <div class="check-item-content">
-                        <label for="check2-modal">マネージャーから合格をもらう</label>
-                    </div>
-                    <input type="checkbox" id="check2-modal">
-                </div>
-            </div>
-            <button class="next-action-button">次のアクションに進む</button>
-        </div>
-    </div>
-
-    <!-- 既存のFABメニューの後に追加 -->
-    <div class="ai-chat-modal">
-        <div class="chat-header">
-            <h3>AIアシスタント</h3>
-            <button class="close-chat-button">×</button>
-        </div>
-        
-        <div class="chat-messages">
-            <div class="message ai-message">
-                <div class="message-content">
-                    こんにちは！どのようなお手伝いができますか？
-                </div>
+            <h1 class="page-title">質問管理</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="質問を検索..." class="search-input">
+                <button class="search-button">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
             </div>
         </div>
         
-        <div class="chat-input">
-            <textarea placeholder="メッセージを入力..." rows="1"></textarea>
-            <button class="send-button">送信</button>
+        <div class="main-content question-management">
+            <!-- 左サイドバー：フィルター -->
+            <div class="question-sidebar">
+                <div class="sidebar-section">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item active" data-filter-type="all">
+                            <span class="sidebar-text">すべて</span>
+                            <span class="sidebar-count">25</span>
+                        </li>
+                        <li class="sidebar-item" data-filter-type="ai">
+                            <span class="sidebar-text">AIアシスタント</span>
+                            <span class="sidebar-count">15</span>
+                        </li>
+                        <li class="sidebar-item" data-filter-type="instructor">
+                            <span class="sidebar-text">講師</span>
+                            <span class="sidebar-count">10</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 右コンテンツ：質問リスト -->
+            <div class="question-content">
+                <!-- 右コンテンツヘッダー -->
+                <div class="question-content-header">
+                    <!-- 講師ステータスセクション -->
+                    <div class="instructor-status-tabs" id="instructorStatusSection" style="display: none;">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-filter-status="all" data-count="10">すべて</button>
+                            <button class="filter-tab" data-filter-status="pending" data-count="3">質問送信済み</button>
+                            <button class="filter-tab" data-filter-status="unread" data-count="2">未読</button>
+                            <button class="filter-tab" data-filter-status="read" data-count="5">既読</button>
+                        </div>
+                    </div>
+                    
+                    <!-- ページネーション -->
+                    <div class="pagination top-pagination">
+                        <span class="pagination-info">1-20/53件</span>
+                        <div class="pagination-buttons">
+                            <button class="pagination-btn prev-btn" disabled>
+                                <img src="121_arr_hoso.png" alt="前へ" class="pagination-arrow prev-arrow">
+                            </button>
+                            <button class="pagination-btn next-btn">
+                                <img src="121_arr_hoso.png" alt="次へ" class="pagination-arrow">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 質問リスト -->
+                <div class="question-list">
+                    <!-- 質問アイテムはJavaScriptで動的に生成されます -->
+                </div>
+            </div>
         </div>
     </div>
 

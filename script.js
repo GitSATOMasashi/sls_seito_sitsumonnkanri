@@ -361,30 +361,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // ピン留めボタンのクリックイベント
-    const pinButtons = document.querySelectorAll('.pin-btn');
-    
-    pinButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.stopPropagation(); // 親要素へのクリックイベントの伝播を防止
-            
-            const questionItem = this.closest('.question-item');
-            questionItem.classList.toggle('pinned');
-            
-            if (questionItem.classList.contains('pinned')) {
-                console.log('ピン留めしました:', questionItem.querySelector('.action-name').textContent);
-                // ピン留めアイテムをリストの先頭に移動
-                const parent = questionItem.parentNode;
-                parent.insertBefore(questionItem, parent.firstChild);
-            } else {
-                console.log('ピン留めを解除しました:', questionItem.querySelector('.action-name').textContent);
-            }
-            
-            // オプションメニューを閉じる
-            this.closest('.question-options').classList.remove('active');
-        });
-    });
-    
     // 削除ボタンのクリックイベント
     const deleteButtons = document.querySelectorAll('.delete-btn');
     
@@ -674,8 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Reactコンポーネント設計",
             message: "Reactコンポーネントの設計について質問があります。再利用可能なコンポーネントを作成する際のベストプラクティスを教えてください。",
             date: "3日前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 2,
@@ -684,8 +659,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "教師あり学習の基礎",
             message: "教師あり学習のアルゴリズムについて質問があります。分類と回帰の違いについて詳しく教えていただけますか？",
             date: "5日前",
-            isUnread: true,
-            isPinned: false
+            isUnread: true
         },
         {
             id: 3,
@@ -694,8 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "React Nativeアプリ開発",
             message: "React Nativeでのパフォーマンス最適化について教えてください。特に画像の読み込みを効率化する方法を知りたいです。",
             date: "1週間前",
-            isUnread: false,
-            isPinned: true
+            isUnread: false
         },
         {
             id: 4,
@@ -704,8 +677,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "S3バケットのセキュリティ設定",
             message: "AWSのS3バケットのセキュリティ設定について質問があります。適切なアクセス制御の方法を教えてください。",
             date: "2週間前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 5,
@@ -714,8 +686,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "効果的なユーザーインタビュー",
             message: "ユーザーインタビューを効果的に行うためのコツを教えてください。質問の仕方や記録の取り方について知りたいです。",
             date: "2週間前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 6,
@@ -724,8 +695,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "複雑なJOINクエリの最適化",
             message: "複数テーブルを結合する複雑なSQLクエリのパフォーマンスを向上させる方法について教えてください。特にインデックス設計のポイントを知りたいです。",
             date: "3週間前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 7,
@@ -734,8 +704,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Webアプリケーションの脆弱性診断",
             message: "自社開発のWebアプリケーションの脆弱性診断を行いたいです。効果的なペネトレーションテストの進め方と、よくある脆弱性の検出方法を教えてください。",
             date: "1ヶ月前",
-            isUnread: true,
-            isPinned: true
+            isUnread: true
         },
         {
             id: 8,
@@ -744,8 +713,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "GitHubActionsのワークフロー設計",
             message: "GitHubActionsを使ったCI/CDパイプラインの構築方法について質問があります。テスト、ビルド、デプロイを自動化する効率的なワークフローの設計方法を教えてください。",
             date: "1ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 9,
@@ -754,8 +722,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "スクラムチームのファシリテーション",
             message: "スクラムマスターとして、チームのパフォーマンスを向上させるための効果的なファシリテーション技術について教えてください。特にデイリースクラムとスプリントレトロスペクティブの進行方法に悩んでいます。",
             date: "1ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 10,
@@ -764,8 +731,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Solidityのセキュリティベストプラクティス",
             message: "Ethereumのスマートコントラクト開発におけるセキュリティ上の注意点とベストプラクティスについて教えてください。特にリエントランシー攻撃の防止方法に興味があります。",
             date: "2ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 11,
@@ -774,8 +740,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "時系列データの予測モデル",
             message: "販売データの時系列分析を行いたいです。Pythonを使った季節性を考慮した予測モデルの構築方法と、精度評価の指標について教えてください。",
             date: "2ヶ月前",
-            isUnread: true,
-            isPinned: false
+            isUnread: true
         },
         {
             id: 12,
@@ -784,8 +749,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "サービス間通信の設計パターン",
             message: "マイクロサービスアーキテクチャにおけるサービス間通信の最適な方法について質問があります。同期通信と非同期通信のトレードオフと、適切な使い分けについて教えてください。",
             date: "2ヶ月前",
-            isUnread: false,
-            isPinned: true
+            isUnread: false
         },
         {
             id: 13,
@@ -794,8 +758,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "ゼロトラストモデルの実装ステップ",
             message: "従来のネットワークセキュリティモデルからゼロトラストモデルへの移行を検討しています。実装の具体的なステップと、優先すべき対策について教えてください。",
             date: "3ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 14,
@@ -804,8 +767,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Webフォントの最適なロード方法",
             message: "Webサイトのパフォーマンスを向上させるために、Webフォントの最適なロード方法について教えてください。特にCLSの改善に効果的な方法を知りたいです。",
             date: "3ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 15,
@@ -814,8 +776,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "BERTモデルのファインチューニング",
             message: "特定ドメインのテキスト分類タスクのために、事前学習済みBERTモデルのファインチューニング方法について教えてください。特に少量のラベル付きデータでの効率的な学習方法に興味があります。",
             date: "3ヶ月前",
-            isUnread: true,
-            isPinned: false
+            isUnread: true
         },
         {
             id: 16,
@@ -824,8 +785,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Kubernetesクラスターのリソース管理",
             message: "Kubernetesクラスターでのリソース管理の最適化について質問があります。特にリソースクォータとリミットレンジの適切な設定方法と、オートスケーリングの戦略について教えてください。",
             date: "4ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 17,
@@ -834,8 +794,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "RESTful APIのバージョニング戦略",
             message: "長期的に運用するRESTful APIのバージョニング戦略について教えてください。特に後方互換性を維持しながら新機能を追加する方法と、クライアントへの影響を最小化する方法を知りたいです。",
             date: "4ヶ月前",
-            isUnread: false,
-            isPinned: true
+            isUnread: false
         },
         {
             id: 18,
@@ -844,8 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "SwiftUIでのアニメーション実装",
             message: "SwiftUIを使った複雑なアニメーションの実装方法について教えてください。特に画面遷移時のカスタムトランジションと、インタラクティブなアニメーションの実装例を知りたいです。",
             date: "5ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 19,
@@ -854,8 +812,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "リアルタイムデータ処理アーキテクチャ",
             message: "大量のセンサーデータをリアルタイムで処理するためのアーキテクチャ設計について教えてください。Apache KafkaとSparkを使った効率的なデータパイプラインの構築方法に興味があります。",
             date: "5ヶ月前",
-            isUnread: true,
-            isPinned: false
+            isUnread: true
         },
         {
             id: 20,
@@ -864,8 +821,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "AWS Lambdaのコールドスタート対策",
             message: "AWS Lambdaのコールドスタート問題を軽減する方法について教えてください。特にJavaやPythonなど言語による違いと、Provisioned Concurrencyの適切な設定方法を知りたいです。",
             date: "6ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 21,
@@ -874,8 +830,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "静的解析ツールの導入と活用",
             message: "開発プロセスに静的解析ツールを導入したいと考えています。Java/TypeScriptプロジェクトに適した静的解析ツールの選定基準と、CIパイプラインへの統合方法について教えてください。",
             date: "6ヶ月前",
-            isUnread: false,
-            isPinned: true
+            isUnread: false
         },
         {
             id: 22,
@@ -884,8 +839,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Webアプリケーションのアクセシビリティ向上",
             message: "Webアプリケーションのアクセシビリティを向上させるための具体的な実装方法について教えてください。特にSPAでのキーボードナビゲーションとスクリーンリーダー対応の実装例を知りたいです。",
             date: "7ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         },
         {
             id: 23,
@@ -894,8 +848,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "Cypressを使ったE2Eテスト設計",
             message: "Cypressを使ったE2Eテストの効率的な設計方法について教えてください。特にテストデータの管理方法と、テスト実行時間の短縮テクニックに興味があります。",
             date: "8ヶ月前",
-            isUnread: false,
-            isPinned: false
+            isUnread: false
         }];
 
     // 質問リストを生成する関数を修正
@@ -937,13 +890,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // ピン留めされたアイテムを先頭に表示
-        filteredData.sort((a, b) => {
-            if (a.isPinned && !b.isPinned) return -1;
-            if (!a.isPinned && b.isPinned) return 1;
-            return 0;
-        });
-        
         // 総アイテム数
         const totalItems = filteredData.length;
         
@@ -971,7 +917,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // 質問アイテムのクラスを設定
             let itemClasses = 'question-item';
             if (question.isUnread) itemClasses += ' unread';
-            if (question.isPinned) itemClasses += ' pinned';
             
             // HTMLを生成
             const questionHTML = `
@@ -1000,12 +945,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </svg>
                             </button>
                             <div class="options-dropdown">
-                                <button class="dropdown-item pin-btn">
-                                    <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 2L12 22M2 12L22 12" />
-                                    </svg>
-                                    <span>${question.isPinned ? 'ピン留め解除' : 'ピン留め'}</span>
-                                </button>
                                 <button class="dropdown-item delete-btn">
                                     <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
@@ -1071,26 +1010,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // このドロップダウンを開閉
                 this.parentElement.classList.toggle('active');
-            });
-        });
-        
-        // ピン留めボタンのクリックイベント
-        const pinButtons = document.querySelectorAll('.pin-btn');
-        pinButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                
-                const questionItem = this.closest('.question-item');
-                const questionId = parseInt(questionItem.dataset.id);
-                
-                // データを更新
-                const questionIndex = questionData.findIndex(q => q.id === questionId);
-                if (questionIndex !== -1) {
-                    questionData[questionIndex].isPinned = !questionData[questionIndex].isPinned;
-                    
-                    // リストを再レンダリング
-                    renderQuestionList();
-                }
             });
         });
         
@@ -1219,8 +1138,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "タイトル未設定",
             message: "質問内容がここに表示されます。",
             date: "たった今",
-            isUnread: true,
-            isPinned: false
+            isUnread: true
         };
         
         // データに追加

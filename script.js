@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ページネーション情報の更新
         const paginationInfo = document.querySelector('.pagination-info');
         if (paginationInfo) {
-            paginationInfo.textContent = `${startItem}-${endItem}/${totalItems}件`;
+            paginationInfo.textContent = `${startItem}-${endItem} / ${totalItems} 件`;
         }
         
         // ボタンの有効/無効状態の更新
@@ -649,7 +649,7 @@ document.addEventListener('DOMContentLoaded', function() {
             path: "Webエンジニア養成 > フロントエンド開発マスター",
             name: "Reactコンポーネント設計",
             message: "Reactコンポーネントの設計について質問があります。再利用可能なコンポーネントを作成する際のベストプラクティスを教えてください。",
-            date: "3日前",
+            date: new Date(new Date().setDate(new Date().getDate() - 3)), // 3日前
             isUnread: false
         },
         {
@@ -658,198 +658,119 @@ document.addEventListener('DOMContentLoaded', function() {
             path: "データサイエンス基礎 > 機械学習アルゴリズム入門",
             name: "教師あり学習の基礎",
             message: "教師あり学習のアルゴリズムについて質問があります。分類と回帰の違いについて詳しく教えていただけますか？",
-            date: "5日前",
+            date: new Date(new Date().setDate(new Date().getDate() - 5)), // 5日前
             isUnread: true
         },
         {
             id: 3,
             type: "ai",
-            path: "モバイルアプリ開発 > クロスプラットフォーム開発",
-            name: "React Nativeアプリ開発",
-            message: "React Nativeでのパフォーマンス最適化について教えてください。特に画像の読み込みを効率化する方法を知りたいです。",
-            date: "1週間前",
+            path: "プログラミング入門 > JavaScript基礎",
+            name: "配列操作のベストプラクティス",
+            message: "JavaScriptの配列操作について質問があります。map, filter, reduceの使い分けについて教えてください。",
+            date: new Date(new Date().setDate(new Date().getDate() - 7)), // 1週間前
             isUnread: false
         },
         {
             id: 4,
             type: "instructor",
-            path: "クラウドエンジニアリング > AWSクラウド基礎",
-            name: "S3バケットのセキュリティ設定",
-            message: "AWSのS3バケットのセキュリティ設定について質問があります。適切なアクセス制御の方法を教えてください。",
-            date: "2週間前",
+            path: "データベース設計 > SQL実践",
+            name: "複雑なJOINクエリの書き方",
+            message: "複数テーブルを結合する複雑なSQLクエリの書き方について質問があります。特にパフォーマンスを考慮した方法を教えてください。",
+            date: new Date(new Date().setDate(new Date().getDate() - 14)), // 2週間前
             isUnread: false
         },
         {
             id: 5,
             type: "ai",
-            path: "UI/UXデザイン実践 > ユーザー調査手法",
-            name: "効果的なユーザーインタビュー",
-            message: "ユーザーインタビューを効果的に行うためのコツを教えてください。質問の仕方や記録の取り方について知りたいです。",
-            date: "2週間前",
-            isUnread: false
+            path: "UI/UXデザイン > モバイルデザイン原則",
+            name: "レスポンシブデザインのベストプラクティス",
+            message: "モバイルファーストのレスポンシブデザインについて質問があります。異なる画面サイズに対応するための効果的な方法を教えてください。",
+            date: new Date(new Date().setDate(new Date().getDate() - 2)), // 2日前
+            isUnread: true
         },
         {
             id: 6,
-            type: "ai",
-            path: "データベース設計 > SQLマスター講座",
-            name: "複雑なJOINクエリの最適化",
-            message: "複数テーブルを結合する複雑なSQLクエリのパフォーマンスを向上させる方法について教えてください。特にインデックス設計のポイントを知りたいです。",
-            date: "3週間前",
+            type: "instructor",
+            path: "クラウドコンピューティング > AWS基礎",
+            name: "S3とEC2の連携方法",
+            message: "AWSのS3とEC2を連携させる方法について質問があります。特にセキュリティを考慮した設定方法を教えてください。",
+            date: new Date(new Date().setDate(new Date().getDate() - 10)), // 10日前
             isUnread: false
         },
         {
             id: 7,
-            type: "instructor",
-            path: "セキュリティエンジニアリング > ペネトレーションテスト",
-            name: "Webアプリケーションの脆弱性診断",
-            message: "自社開発のWebアプリケーションの脆弱性診断を行いたいです。効果的なペネトレーションテストの進め方と、よくある脆弱性の検出方法を教えてください。",
-            date: "1ヶ月前",
+            type: "ai",
+            path: "アルゴリズムとデータ構造 > 探索アルゴリズム",
+            name: "二分探索の実装方法",
+            message: "二分探索アルゴリズムの実装について質問があります。特にエッジケースの処理方法について詳しく教えてください。",
+            date: new Date(new Date().setDate(new Date().getDate() - 1)), // 1日前
             isUnread: true
         },
         {
             id: 8,
-            type: "ai",
-            path: "DevOps実践 > CI/CD構築",
-            name: "GitHubActionsのワークフロー設計",
-            message: "GitHubActionsを使ったCI/CDパイプラインの構築方法について質問があります。テスト、ビルド、デプロイを自動化する効率的なワークフローの設計方法を教えてください。",
-            date: "1ヶ月前",
+            type: "instructor",
+            path: "セキュリティ > Webアプリケーションセキュリティ",
+            name: "XSS攻撃の防止方法",
+            message: "クロスサイトスクリプティング（XSS）攻撃を防ぐための効果的な方法について質問があります。具体的な実装例も含めて教えていただけますか？",
+            date: new Date(new Date().setDate(new Date().getDate() - 4)), // 4日前
             isUnread: false
         },
         {
             id: 9,
-            type: "instructor",
-            path: "プロジェクト管理 > アジャイル開発手法",
-            name: "スクラムチームのファシリテーション",
-            message: "スクラムマスターとして、チームのパフォーマンスを向上させるための効果的なファシリテーション技術について教えてください。特にデイリースクラムとスプリントレトロスペクティブの進行方法に悩んでいます。",
-            date: "1ヶ月前",
+            type: "ai",
+            path: "バックエンド開発 > Node.js実践",
+            name: "非同期処理のベストプラクティス",
+            message: "Node.jsにおける非同期処理のベストプラクティスについて質問があります。Promise, async/awaitの効果的な使い方を教えてください。",
+            date: new Date(new Date().setHours(new Date().getHours() - 5)), // 5時間前
             isUnread: false
         },
         {
             id: 10,
-            type: "ai",
-            path: "ブロックチェーン技術 > スマートコントラクト開発",
-            name: "Solidityのセキュリティベストプラクティス",
-            message: "Ethereumのスマートコントラクト開発におけるセキュリティ上の注意点とベストプラクティスについて教えてください。特にリエントランシー攻撃の防止方法に興味があります。",
-            date: "2ヶ月前",
-            isUnread: false
+            type: "instructor",
+            path: "モバイルアプリ開発 > React Native入門",
+            name: "ネイティブモジュールの統合方法",
+            message: "React Nativeでネイティブモジュールを統合する方法について質問があります。iOSとAndroid両方に対応する方法を教えてください。",
+            date: new Date(new Date().setHours(new Date().getHours() - 2)), // 2時間前
+            isUnread: true
         },
         {
             id: 11,
-            type: "instructor",
-            path: "データ分析 > Pythonによる統計解析",
-            name: "時系列データの予測モデル",
-            message: "販売データの時系列分析を行いたいです。Pythonを使った季節性を考慮した予測モデルの構築方法と、精度評価の指標について教えてください。",
-            date: "2ヶ月前",
+            type: "ai",
+            path: "DevOps > CI/CD実践",
+            name: "GitHubActionsの設定方法",
+            message: "GitHub Actionsを使ったCI/CDパイプラインの設定方法について質問があります。特にテストと自動デプロイの設定例を教えてください。",
+            date: new Date(new Date().setMinutes(new Date().getMinutes() - 30)), // 30分前
             isUnread: true
         },
         {
             id: 12,
-            type: "ai",
-            path: "システム設計 > マイクロサービスアーキテクチャ",
-            name: "サービス間通信の設計パターン",
-            message: "マイクロサービスアーキテクチャにおけるサービス間通信の最適な方法について質問があります。同期通信と非同期通信のトレードオフと、適切な使い分けについて教えてください。",
-            date: "2ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 13,
             type: "instructor",
-            path: "ネットワークエンジニアリング > ゼロトラストセキュリティ",
-            name: "ゼロトラストモデルの実装ステップ",
-            message: "従来のネットワークセキュリティモデルからゼロトラストモデルへの移行を検討しています。実装の具体的なステップと、優先すべき対策について教えてください。",
-            date: "3ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 14,
-            type: "ai",
-            path: "フロントエンド最適化 > パフォーマンスチューニング",
-            name: "Webフォントの最適なロード方法",
-            message: "Webサイトのパフォーマンスを向上させるために、Webフォントの最適なロード方法について教えてください。特にCLSの改善に効果的な方法を知りたいです。",
-            date: "3ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 15,
-            type: "instructor",
-            path: "AIエンジニアリング > 自然言語処理",
-            name: "BERTモデルのファインチューニング",
-            message: "特定ドメインのテキスト分類タスクのために、事前学習済みBERTモデルのファインチューニング方法について教えてください。特に少量のラベル付きデータでの効率的な学習方法に興味があります。",
-            date: "3ヶ月前",
+            path: "プロジェクト管理 > アジャイル開発手法",
+            name: "スクラムの効果的な導入方法",
+            message: "小規模チームにスクラム開発手法を導入する効果的な方法について質問があります。特に初めての導入時の注意点を教えてください。",
+            date: new Date(), // 現在（たった今）
             isUnread: true
-        },
-        {
-            id: 16,
-            type: "ai",
-            path: "コンテナ技術 > Kubernetes運用",
-            name: "Kubernetesクラスターのリソース管理",
-            message: "Kubernetesクラスターでのリソース管理の最適化について質問があります。特にリソースクォータとリミットレンジの適切な設定方法と、オートスケーリングの戦略について教えてください。",
-            date: "4ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 17,
-            type: "instructor",
-            path: "バックエンド開発 > APIデザイン",
-            name: "RESTful APIのバージョニング戦略",
-            message: "長期的に運用するRESTful APIのバージョニング戦略について教えてください。特に後方互換性を維持しながら新機能を追加する方法と、クライアントへの影響を最小化する方法を知りたいです。",
-            date: "4ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 18,
-            type: "ai",
-            path: "モバイルアプリ開発 > iOS開発",
-            name: "SwiftUIでのアニメーション実装",
-            message: "SwiftUIを使った複雑なアニメーションの実装方法について教えてください。特に画面遷移時のカスタムトランジションと、インタラクティブなアニメーションの実装例を知りたいです。",
-            date: "5ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 19,
-            type: "instructor",
-            path: "データエンジニアリング > データパイプライン構築",
-            name: "リアルタイムデータ処理アーキテクチャ",
-            message: "大量のセンサーデータをリアルタイムで処理するためのアーキテクチャ設計について教えてください。Apache KafkaとSparkを使った効率的なデータパイプラインの構築方法に興味があります。",
-            date: "5ヶ月前",
-            isUnread: true
-        },
-        {
-            id: 20,
-            type: "ai",
-            path: "クラウドアーキテクチャ > サーバーレスコンピューティング",
-            name: "AWS Lambdaのコールドスタート対策",
-            message: "AWS Lambdaのコールドスタート問題を軽減する方法について教えてください。特にJavaやPythonなど言語による違いと、Provisioned Concurrencyの適切な設定方法を知りたいです。",
-            date: "6ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 21,
-            type: "instructor",
-            path: "セキュアコーディング > コード品質向上",
-            name: "静的解析ツールの導入と活用",
-            message: "開発プロセスに静的解析ツールを導入したいと考えています。Java/TypeScriptプロジェクトに適した静的解析ツールの選定基準と、CIパイプラインへの統合方法について教えてください。",
-            date: "6ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 22,
-            type: "ai",
-            path: "UI/UXデザイン > アクセシビリティ",
-            name: "Webアプリケーションのアクセシビリティ向上",
-            message: "Webアプリケーションのアクセシビリティを向上させるための具体的な実装方法について教えてください。特にSPAでのキーボードナビゲーションとスクリーンリーダー対応の実装例を知りたいです。",
-            date: "7ヶ月前",
-            isUnread: false
-        },
-        {
-            id: 23,
-            type: "instructor",
-            path: "テスト自動化 > E2Eテスト戦略",
-            name: "Cypressを使ったE2Eテスト設計",
-            message: "Cypressを使ったE2Eテストの効率的な設計方法について教えてください。特にテストデータの管理方法と、テスト実行時間の短縮テクニックに興味があります。",
-            date: "8ヶ月前",
-            isUnread: false
-        }];
+        }
+    ];
+
+    // 日付をフォーマットする関数
+    function formatDate(date) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 今日の0時0分
+        const targetDate = new Date(date);
+        
+        // 日付部分だけの比較用
+        const targetDay = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+        
+        if (targetDay.getTime() === today.getTime()) {
+            // 本日の場合は時刻を表示
+            return targetDate.getHours().toString().padStart(2, '0') + ':' + 
+                   targetDate.getMinutes().toString().padStart(2, '0');
+        } else {
+            // 本日以外の場合は日付を表示
+            return (targetDate.getMonth() + 1) + '月' + targetDate.getDate() + '日';
+        }
+    }
 
     // 質問リストを生成する関数を修正
     function renderQuestionList() {
@@ -890,6 +811,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        // 日付順（新しい順）にソート
+        filteredData.sort((a, b) => {
+            // Date オブジェクトを比較
+            return new Date(b.date) - new Date(a.date);
+        });
+        
         // 総アイテム数
         const totalItems = filteredData.length;
         
@@ -918,6 +845,9 @@ document.addEventListener('DOMContentLoaded', function() {
             let itemClasses = 'question-item';
             if (question.isUnread) itemClasses += ' unread';
             
+            // 日付をフォーマット
+            const formattedDate = formatDate(question.date);
+            
             // HTMLを生成
             const questionHTML = `
                 <div class="${itemClasses}" data-id="${question.id}" data-type="${question.type}">
@@ -935,7 +865,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     <!-- 右側：日付とオプション -->
                     <div class="question-item-side">
-                        <div class="question-date">${question.date}</div>
+                        <div class="question-date">${formattedDate}</div>
                         <div class="question-options">
                             <button class="option-btn more-btn" title="その他">
                                 <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -976,7 +906,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ページネーション情報の更新
         const paginationInfo = document.querySelector('.pagination-info');
         if (paginationInfo) {
-            paginationInfo.textContent = `${startItem}-${endItem}/${totalItems}件`;
+            paginationInfo.textContent = `${startItem}-${endItem} / ${totalItems} 件`;
         }
         
         // ボタンの有効/無効状態の更新
@@ -1124,7 +1054,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupQuestionItemListeners();
     }
 
-    // 新しい質問を追加する関数
+    // 新しい質問を追加する関数を修正
     function addNewQuestion(questionData) {
         // 新しいIDを生成（既存の最大ID + 1）
         const maxId = Math.max(...questionData.map(q => q.id), 0);
@@ -1137,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', function() {
             path: "新しい質問",
             name: "タイトル未設定",
             message: "質問内容がここに表示されます。",
-            date: "たった今",
+            date: new Date(), // 現在の日時
             isUnread: true
         };
         

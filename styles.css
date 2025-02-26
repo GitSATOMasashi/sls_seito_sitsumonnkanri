@@ -1417,3 +1417,17 @@ body {
 .question-item.pending .message-preview {
     color: var(--text-primary); /* 通常のテキスト色を維持 */
 }
+
+/* 検索ハイライトのスタイル */
+.search-highlight {
+    background-color: rgba(253, 185, 70, 0.4); /* 薄いオレンジ色 */
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: inherit; /* 親要素のフォントウェイトを継承 */
+    color: inherit; /* 親要素のテキストカラーを継承 */
+}
+
+/* 未読メッセージ内のハイライト（コントラスト調整） */
+.question-item.unread .search-highlight {
+    background-color: rgba(253, 185, 70, 0.5); /* より濃いめのオレンジ */
+}

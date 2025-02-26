@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
     const itemsPerPage = 10; // 1ページあたりの表示件数
     let totalItems = document.querySelectorAll('.question-item').length;
+    let currentSearchTerm = ''; // 現在の検索ワードを保持する変数
 
     // 表示するアイテムの切り替え - フィルタリングを考慮
     function updateVisibleItems() {
@@ -1287,5 +1288,277 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSidebarCounts();
         
         return newId; // 新しい質問のIDを返す
+    }
+
+    // 検索機能の実装
+    function setupSearchBar() {
+        const searchInput = document.querySelector('.search-input');
+        const searchButton = document.querySelector('.search-button');
+        
+        if (!searchInput) return;
+        
+        // 検索入力イベント
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            // 検索語が空の場合、全アイテムを表示
+            if (searchTerm === '') {
+                clearSearch();
+                return;
+            }
+        });
+        
+        // 検索ボタンクリックイベント
+        if (searchButton) {
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                if (searchTerm !== '') {
+                    performSearch(searchTerm);
+                }
+            });
+        }
+        
+        // Enterキー押下イベント
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.toLowerCase().trim();
+                if (searchTerm !== '') {
+                    performSearch(searchTerm);
+                }
+            }
+        });
+    }
+
+    // 検索を実行する関数
+    function performSearch(searchTerm) {
+        console.log('Searching for:', searchTerm);
+        
+        // 検索ワードを保存（ハイライト表示に使用）
+        currentSearchTerm = searchTerm;
+        
+        // 現在のフィルター状態を保存
+        const activeTypeItem = document.querySelector('.sidebar-item[data-filter-type].active');
+        const activeType = activeTypeItem ? activeTypeItem.dataset.filterType : 'all';
+        
+        const instructorStatusSection = document.getElementById('instructorStatusSection');
+        const activeStatusItem = document.querySelector('.filter-tab[data-filter-status].active');
+        const activeStatus = (instructorStatusSection.style.display === 'none' || !activeStatusItem) ? 'all' : 
+                            activeStatusItem.dataset.filterStatus;
+        
+        // フィルタリング条件に基づいてデータをフィルタリング
+        let filteredData = [...questionData];
+        
+        // AIチャットはすべて既読状態に設定
+        filteredData.forEach(question => {
+            if (question.type === 'ai') {
+                question.isUnread = false;
+            }
+        });
+        
+        // タイプフィルター
+        if (activeType !== 'all') {
+            filteredData = filteredData.filter(q => q.type === activeType);
+        }
+        
+        // ステータスフィルター（講師の場合のみ）
+        if (activeType === 'instructor' && activeStatus !== 'all') {
+            if (activeStatus === 'unread') {
+                filteredData = filteredData.filter(q => q.isUnread);
+            } else if (activeStatus === 'read') {
+                filteredData = filteredData.filter(q => !q.isUnread && !q.isPending);
+            } else if (activeStatus === 'pending') {
+                filteredData = filteredData.filter(q => q.isPending);
+            }
+        }
+        
+        // 検索語でさらにフィルタリング
+        filteredData = filteredData.filter(question => {
+            const nameMatch = question.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const pathMatch = question.path.toLowerCase().includes(searchTerm.toLowerCase());
+            const messageMatch = question.message.toLowerCase().includes(searchTerm.toLowerCase());
+            
+            return nameMatch || pathMatch || messageMatch;
+        });
+        
+        // 検索結果でリストを再レンダリング
+        renderSearchResults(filteredData, searchTerm);
+    }
+
+    // 検索結果をレンダリングする関数
+    function renderSearchResults(filteredData, searchTerm) {
+        const questionList = document.querySelector('.question-list');
+        
+        // リストをクリア
+        questionList.innerHTML = '';
+        
+        // 日付順（新しい順）にソート
+        filteredData.sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+        });
+        
+        // 総アイテム数
+        const totalItems = filteredData.length;
+        
+        // 最大ページ数を計算
+        const maxPage = Math.ceil(totalItems / itemsPerPage);
+        
+        // 現在のページが最大ページを超えないようにする
+        if (currentPage > maxPage && maxPage > 0) {
+            currentPage = maxPage;
+        } else if (currentPage < 1 || maxPage === 0) {
+            currentPage = 1;
+        }
+        
+        // ページネーション
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        
+        // 現在のページのアイテムを取得
+        const currentPageItems = filteredData.slice(startIndex, endIndex);
+        
+        // 検索結果がない場合のメッセージ
+        if (currentPageItems.length === 0) {
+            questionList.innerHTML = `
+                <div class="question-item" style="justify-content: center; padding: 24px; text-align: center; color: var(--text-secondary);">
+                    <p>検索結果がありません。別のキーワードで試してください。</p>
+                </div>
+            `;
+        } else {
+            // 各質問アイテムをレンダリング
+            currentPageItems.forEach(question => {
+                // 質問アイテムのクラスを設定
+                let itemClasses = 'question-item';
+                if (question.isUnread) itemClasses += ' unread';
+                if (question.isPending && question.type === 'instructor') itemClasses += ' pending';
+                
+                // 日付をフォーマット
+                const formattedDate = formatDate(question.date);
+                
+                // 検索ワードでハイライトされたテキストを生成
+                const highlightedName = highlightText(question.name, searchTerm);
+                const highlightedPath = highlightText(question.path, searchTerm);
+                
+                // メッセージプレビューの処理（質問送信済みの場合は考慮）
+                let messageText = question.message;
+                let highlightedMessage = highlightText(messageText, searchTerm);
+                
+                const messagePreview = question.isPending && question.type === 'instructor'
+                    ? `<span class="pending-text">質問送信済み — </span>${highlightedMessage}`
+                    : highlightedMessage;
+                
+                // HTMLを生成
+                const questionHTML = `
+                    <div class="${itemClasses}" data-id="${question.id}" data-type="${question.type}">
+                        <!-- 左側：アイコン -->
+                        <div class="question-icon">
+                            <span class="badge badge-type badge-${question.type}">${question.type === 'ai' ? 'AI' : '講師'}</span>
+                        </div>
+                        
+                        <!-- 中央：メインコンテンツ -->
+                        <div class="question-item-content">
+                            <div class="action-path">${highlightedPath}</div>
+                            <div class="action-name">${highlightedName}</div>
+                            <div class="message-preview">${messagePreview}</div>
+                        </div>
+                        
+                        <!-- 右側：日付とオプション -->
+                        <div class="question-item-side">
+                            <div class="question-date">${formattedDate}</div>
+                            <div class="question-options">
+                                <button class="option-btn more-btn" title="その他">
+                                    <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="5" r="1" />
+                                        <circle cx="12" cy="12" r="1" />
+                                        <circle cx="12" cy="19" r="1" />
+                                    </svg>
+                                </button>
+                                <div class="options-dropdown">
+                                    <button class="dropdown-item delete-btn">
+                                        <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                                        </svg>
+                                        <span>削除</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // リストに追加
+                questionList.innerHTML += questionHTML;
+            });
+        }
+        
+        // 質問アイテムのイベントリスナーを設定
+        setupQuestionItemListeners();
+        
+        // ページネーション情報を更新
+        updatePaginationInfo(totalItems, startIndex, endIndex);
+    }
+
+    // 検索をクリアする関数
+    function clearSearch() {
+        console.log('Clearing search');
+        
+        // 検索ワードをクリア
+        currentSearchTerm = '';
+        
+        // 通常の質問リストを再レンダリング
+        renderQuestionList();
+    }
+
+    // 検索機能のセットアップ
+    setupSearchBar();
+
+    // テキスト内の検索ワードをハイライト表示する関数
+    function highlightText(text, searchTerm) {
+        if (!searchTerm || !text) return text;
+        
+        // 検索ワードをエスケープして正規表現で使えるようにする
+        const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        
+        // 大文字小文字を区別しない正規表現を作成
+        const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
+        
+        // 検索ワードにマッチする部分をハイライト用のspanで囲む
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    // HTMLを含むテキスト内の検索ワードをハイライト表示する関数
+    function highlightHTMLSafely(html, searchTerm) {
+        if (!searchTerm || !html) return html;
+        
+        // DOMParserを使用してHTMLを解析
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${html}</div>`, 'text/html');
+        const container = doc.body.firstChild;
+        
+        // テキストノードを再帰的に処理する関数
+        function processNode(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                // テキストノードの場合、検索ワードをハイライト
+                if (node.textContent.trim() !== '') {
+                    const highlightedText = highlightText(node.textContent, searchTerm);
+                    if (highlightedText !== node.textContent) {
+                        const span = doc.createElement('span');
+                        span.innerHTML = highlightedText;
+                        node.parentNode.replaceChild(span, node);
+                    }
+                }
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                // 要素ノードの場合、子ノードを再帰的に処理
+                // ただし、すでにハイライト用のspanの場合は処理しない
+                if (node.className !== 'search-highlight') {
+                    Array.from(node.childNodes).forEach(processNode);
+                }
+            }
+        }
+        
+        // コンテナ内のすべてのノードを処理
+        Array.from(container.childNodes).forEach(processNode);
+        
+        // 処理後のHTMLを返す
+        return container.innerHTML;
     }
 }); 

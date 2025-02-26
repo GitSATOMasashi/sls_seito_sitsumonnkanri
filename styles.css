@@ -816,12 +816,21 @@ body {
     padding: 12px 16px 10px 16px;
     border-top: 1px solid var(--border);
     background: white;
-    transition: background-color 0.2s;
-    position: relative;
+    transition: background-color 0.2s, border 0.2s, box-shadow 0.2s;
+    position: relative; /* 位置の基準点 */
+    border-left: 1px solid transparent; /* 透明なボーダーで初期化 */
+    border-right: 1px solid transparent; /* 透明なボーダーで初期化 */
+    border-bottom: 1px solid transparent; /* 透明なボーダーで初期化 */
+    margin: 0 -1px; /* ボーダーの幅を相殺 */
 }
 
+/* 質問アイテムのホバー効果 */
 .question-item:hover {
-    background-color: #f8fafd;
+    border: 1px solid var(--border);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08); /* シャドウを濃く、より広く */
+    z-index: 1; /* 他の要素より前面に表示 */
+    cursor: pointer; /* ポインターカーソルを表示 */
+    margin-left: 0;
 }
 
 /* 未読状態のスタイル */

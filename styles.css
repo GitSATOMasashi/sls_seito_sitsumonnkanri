@@ -815,6 +815,20 @@ body {
     display: flex;
     padding: 12px 16px 10px 16px;
     border-top: 1px solid var(--border);
+    background: #f2f6fc;
+    transition: background-color 0.2s, border 0.2s, box-shadow 0.2s;
+    position: relative; /* 位置の基準点 */
+    border-left: 1px solid transparent; /* 透明なボーダーで初期化 */
+    border-right: 1px solid transparent; /* 透明なボーダーで初期化 */
+    border-bottom: 1px solid transparent; /* 透明なボーダーで初期化 */
+    margin: 0;
+}
+
+/* 質問アイテム - 新レイアウト（優先度を上げる） */
+.question-item.unread {
+    display: flex;
+    padding: 12px 16px 10px 16px;
+    border-top: 1px solid var(--border);
     background: white;
     transition: background-color 0.2s, border 0.2s, box-shadow 0.2s;
     position: relative; /* 位置の基準点 */
@@ -831,11 +845,6 @@ body {
     z-index: 1; /* 他の要素より前面に表示 */
     cursor: pointer; /* ポインターカーソルを表示 */
     margin-left: 0;
-}
-
-/* 未読状態のスタイル */
-.question-item.unread .action-name {
-    font-weight: bold;
 }
 
 /* 左側：アイコン */
@@ -868,12 +877,27 @@ body {
     color: var(--text-primary);
     font-size: 10px;
     margin-bottom: 0px;
+    font-weight: 500;
+}
+
+/* アクションパス */
+.question-item.unread .action-path {
+    color: var(--text-primary);
+    font-size: 10px;
+    margin-bottom: 0px;
     font-weight: bold;
 }
 
 /* アクション名 */
 .action-name {
-    font-weight: 600;
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+/* アクション名 */
+.question-item.unread .action-name {
+    font-weight: bold;
     font-size: 16px;
     color: var(--text-primary);
     margin-bottom: 4px;
@@ -891,6 +915,14 @@ body {
 
 /* 日付 */
 .question-date {
+    font-size: 12px;
+    color: var(--text-primary);
+    margin-bottom: 0px;
+    margin-right: 10px;
+}
+
+/* 日付 */
+.question-item.unread .question-date {
     font-size: 12px;
     color: var(--text-primary);
     margin-bottom: 0px;

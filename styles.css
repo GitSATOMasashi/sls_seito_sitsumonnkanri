@@ -1271,6 +1271,7 @@ body {
 
 .pagination-info{
     font-size: 13px;
+    color: var(--text-secondary);
 }
 
 .pagination-buttons{
@@ -1436,4 +1437,36 @@ body {
 /* 質問送信済みタブのafter要素を非表示にする */
 .filter-tab[data-filter-status="pending"]::after {
     display: none !important;
+}
+
+/* ナビゲーションバッジのスタイル */
+.nav-badge {
+    background-color: var(--primary);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 1px 6px;
+    border-radius: 10px;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    min-width: 16px;
+    text-align: center;
+}
+
+/* 未読数が0の場合は非表示 */
+.nav-badge:empty,
+.nav-badge[data-count="0"] {
+    display: none;
+}
+
+/* モバイル表示時のバッジ位置調整 */
+@media (max-width: 768px) {
+    .nav-badge {
+        right: auto;
+        left: 36px;
+        top: 12px;
+        transform: none;
+    }
 }

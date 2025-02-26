@@ -322,6 +322,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 tab.setAttribute('data-count', '0'); // 明示的に0を設定
             }
         });
+        
+        // 最後にナビゲーションバッジも更新
+        updateNavBadge();
+    }
+
+    // 未読の質問数を取得する関数
+    function getUnreadCount() {
+        // 講師への未読質問の数をカウント
+        return questionData.filter(q => q.type === 'instructor' && q.isUnread).length;
+    }
+
+    // サイドバーの未読バッジを更新する関数
+    function updateNavBadge() {
+        const unreadCount = getUnreadCount();
+        const navBadge = document.querySelector('.nav-badge');
+        
+        if (navBadge) {
+            if (unreadCount > 0) {
+                navBadge.textContent = unreadCount;
+            } else {
+                navBadge.textContent = '';
+            }
+        }
     }
 
     // 「続きを読む」ボタンの機能

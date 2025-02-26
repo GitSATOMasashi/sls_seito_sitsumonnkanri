@@ -734,6 +734,9 @@ body {
 }
 
 .sidebar-item {
+    height: 26px;
+    min-height: 26px;
+    max-height: 26px;
     display: flex;
     align-items: center;
     padding: 6px 16px;
@@ -1385,4 +1388,10 @@ body {
 
 .btn-danger:hover {
     background-color: #ff7875;
+}
+
+/* サイドバーカウントのスタイルは変更せず、空の場合のスペースを維持 */
+.sidebar-count:empty {
+    display: inline-block;
+    min-width: 20px; /* 既存のカウント表示と同じ幅を確保 */
 }

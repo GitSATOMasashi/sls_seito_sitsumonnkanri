@@ -5,18 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.querySelector('.main-container');
 
     if (hamburgerMenu && sidebar && mainContent) {
-        hamburgerMenu.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-            hamburgerMenu.classList.toggle('active');
-        });
+    hamburgerMenu.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        hamburgerMenu.classList.toggle('active');
+    });
 
-        // メインコンテンツクリックでメニューを閉じる
-        mainContent.addEventListener('click', function() {
-            if (sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                hamburgerMenu.classList.remove('active');
-            }
-        });
+    // メインコンテンツクリックでメニューを閉じる
+    mainContent.addEventListener('click', function() {
+        if (sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+        }
+    });
     }
 
     // 質問アイテムのクラスを状態に基づいて更新
@@ -251,21 +251,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // サイドバーのカウント数を更新する関数
     function updateSidebarCounts() {
-        // 全体のカウント
-        const allCount = document.querySelectorAll('.question-item').length;
-        document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count').textContent = allCount;
+        // 未読メッセージの件数を取得
+        const allUnreadCount = questionData.filter(q => q.isUnread).length;
+        const aiUnreadCount = questionData.filter(q => q.type === 'ai' && q.isUnread).length;
+        const instructorUnreadCount = questionData.filter(q => q.type === 'instructor' && q.isUnread).length;
         
-        // AIアシスタントのカウント
-        const aiCount = document.querySelectorAll('.question-item .badge-ai').length;
-        document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = aiCount;
-        
-        // 講師のカウント
-        const instructorCount = document.querySelectorAll('.question-item .badge-instructor').length;
-        document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count').textContent = instructorCount;
-        
-        // 未読カウント（オプション）
-        const unreadCount = document.querySelectorAll('.question-item.unread').length;
-        console.log('未読メッセージ数:', unreadCount);
+        // サイドバーのカウントを更新
+        document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count').textContent = allUnreadCount > 0 ? allUnreadCount : '';
+        document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = aiUnreadCount > 0 ? aiUnreadCount : '';
+        document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count').textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
     }
 
     // 「続きを読む」ボタンの機能
@@ -640,7 +634,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 1,
             type: "ai",
-            path: "Webエンジニア養成 > フロントエンド開発マスター",
+            path: "Webエンジニア養成 / フロントエンド開発マスター",
             name: "Reactコンポーネント設計",
             message: "Reactコンポーネントの設計について質問があります。再利用可能なコンポーネントを作成する際のベストプラクティスを教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 3)), // 3日前
@@ -649,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 2,
             type: "instructor",
-            path: "データサイエンス基礎 > 機械学習アルゴリズム入門",
+            path: "データサイエンス基礎 / 機械学習アルゴリズム入門",
             name: "教師あり学習の基礎",
             message: "教師あり学習のアルゴリズムについて質問があります。分類と回帰の違いについて詳しく教えていただけますか？",
             date: new Date(new Date().setDate(new Date().getDate() - 5)), // 5日前
@@ -658,7 +652,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 3,
             type: "ai",
-            path: "プログラミング入門 > JavaScript基礎",
+            path: "プログラミング入門 / JavaScript基礎",
             name: "配列操作のベストプラクティス",
             message: "JavaScriptの配列操作について質問があります。map, filter, reduceの使い分けについて教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 7)), // 1週間前
@@ -667,7 +661,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 4,
             type: "instructor",
-            path: "データベース設計 > SQL実践",
+            path: "データベース設計 / SQL実践",
             name: "複雑なJOINクエリの書き方",
             message: "複数テーブルを結合する複雑なSQLクエリの書き方について質問があります。特にパフォーマンスを考慮した方法を教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 14)), // 2週間前
@@ -676,7 +670,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 5,
             type: "ai",
-            path: "UI/UXデザイン > モバイルデザイン原則",
+            path: "UI/UXデザイン / モバイルデザイン原則",
             name: "レスポンシブデザインのベストプラクティス",
             message: "モバイルファーストのレスポンシブデザインについて質問があります。異なる画面サイズに対応するための効果的な方法を教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 2)), // 2日前
@@ -685,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 6,
             type: "instructor",
-            path: "クラウドコンピューティング > AWS基礎",
+            path: "クラウドコンピューティング / AWS基礎",
             name: "S3とEC2の連携方法",
             message: "AWSのS3とEC2を連携させる方法について質問があります。特にセキュリティを考慮した設定方法を教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 10)), // 10日前
@@ -694,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 7,
             type: "ai",
-            path: "アルゴリズムとデータ構造 > 探索アルゴリズム",
+            path: "アルゴリズムとデータ構造 / 探索アルゴリズム",
             name: "二分探索の実装方法",
             message: "二分探索アルゴリズムの実装について質問があります。特にエッジケースの処理方法について詳しく教えてください。",
             date: new Date(new Date().setDate(new Date().getDate() - 1)), // 1日前
@@ -703,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 8,
             type: "instructor",
-            path: "セキュリティ > Webアプリケーションセキュリティ",
+            path: "セキュリティ / Webアプリケーションセキュリティ",
             name: "XSS攻撃の防止方法",
             message: "クロスサイトスクリプティング（XSS）攻撃を防ぐための効果的な方法について質問があります。具体的な実装例も含めて教えていただけますか？",
             date: new Date(new Date().setDate(new Date().getDate() - 4)), // 4日前
@@ -712,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 9,
             type: "ai",
-            path: "バックエンド開発 > Node.js実践",
+            path: "バックエンド開発 / Node.js実践",
             name: "非同期処理のベストプラクティス",
             message: "Node.jsにおける非同期処理のベストプラクティスについて質問があります。Promise, async/awaitの効果的な使い方を教えてください。",
             date: new Date(new Date().setHours(new Date().getHours() - 5)), // 5時間前
@@ -721,7 +715,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 10,
             type: "instructor",
-            path: "モバイルアプリ開発 > React Native入門",
+            path: "モバイルアプリ開発 / React Native入門",
             name: "ネイティブモジュールの統合方法",
             message: "React Nativeでネイティブモジュールを統合する方法について質問があります。iOSとAndroid両方に対応する方法を教えてください。",
             date: new Date(new Date().setHours(new Date().getHours() - 2)), // 2時間前
@@ -730,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 11,
             type: "ai",
-            path: "DevOps > CI/CD実践",
+            path: "DevOps / CI/CD実践",
             name: "GitHubActionsの設定方法",
             message: "GitHub Actionsを使ったCI/CDパイプラインの設定方法について質問があります。特にテストと自動デプロイの設定例を教えてください。",
             date: new Date(new Date().setMinutes(new Date().getMinutes() - 30)), // 30分前
@@ -739,7 +733,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 12,
             type: "instructor",
-            path: "プロジェクト管理 > アジャイル開発手法",
+            path: "プロジェクト管理 / アジャイル開発手法",
             name: "スクラムの効果的な導入方法",
             message: "小規模チームにスクラム開発手法を導入する効果的な方法について質問があります。特に初めての導入時の注意点を教えてください。",
             date: new Date(), // 現在（たった今）

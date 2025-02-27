@@ -5,18 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.querySelector('.main-container');
 
     if (hamburgerMenu && sidebar && mainContent) {
-    hamburgerMenu.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-        hamburgerMenu.classList.toggle('active');
-    });
+        hamburgerMenu.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            hamburgerMenu.classList.toggle('active');
+        });
 
-    // メインコンテンツクリックでメニューを閉じる
-    mainContent.addEventListener('click', function() {
-        if (sidebar.classList.contains('active')) {
-            sidebar.classList.remove('active');
-            hamburgerMenu.classList.remove('active');
-        }
-    });
+        // メインコンテンツクリックでメニューを閉じる
+        mainContent.addEventListener('click', function() {
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
     }
 
     // 質問アイテムのクラスを状態に基づいて更新
@@ -1584,4 +1584,163 @@ document.addEventListener('DOMContentLoaded', function() {
         // 処理後のHTMLを返す
         return container.innerHTML;
     }
+
+    // ウィンドウサイズ変更時のサイドバー調整
+    function adjustSidebarOnResize() {
+        const sidebar = document.querySelector('.sidebar');
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        
+        // ウィンドウサイズが変わったときの処理
+        window.addEventListener('resize', function() {
+            // デスクトップサイズになったらサイドバーを表示
+            if (window.innerWidth > 767) {
+                sidebar.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
+    }
+
+    // リサイズ時のサイドバー調整
+    adjustSidebarOnResize();
+
+    // オーバーレイのクリックイベント
+    function setupOverlay() {
+        const overlay = document.querySelector('.sidebar-overlay');
+        const sidebar = document.querySelector('.sidebar');
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            });
+        }
+    }
+
+    // モバイルフィルターチップの設定
+    function setupMobileFilterChips() {
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const sidebarItems = document.querySelectorAll('.sidebar-item[data-filter-type]');
+        const instructorStatusSection = document.getElementById('instructorStatusSection');
+        
+        if (!filterChips.length) return; // フィルターチップがなければ終了
+        
+        // フィルターチップのカウントを更新する関数
+        function updateChipCounts() {
+            // サイドバーのカウントをフィルターチップにも反映
+            sidebarItems.forEach(item => {
+                const filterType = item.dataset.filterType;
+                const count = item.querySelector('.sidebar-count').textContent;
+                const chip = document.querySelector(`.filter-chip[data-filter-type="${filterType}"] .chip-count`);
+                if (chip) {
+                    chip.textContent = count;
+                    console.log(`Updated chip count for ${filterType}: ${count}`);
+                }
+            });
+            
+            // アクティブなサイドバー項目に対応するチップもアクティブに
+            const activeSidebarItem = document.querySelector('.sidebar-item.active');
+            if (activeSidebarItem) {
+                const filterType = activeSidebarItem.dataset.filterType;
+                filterChips.forEach(chip => {
+                    if (chip.dataset.filterType === filterType) {
+                        chip.classList.add('active');
+                    } else {
+                        chip.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 初期状態の設定
+        updateChipCounts();
+        
+        // 質問リストが更新されるたびにカウントも更新
+        const originalRenderQuestionList = window.renderQuestionList;
+        if (typeof originalRenderQuestionList === 'function') {
+            window.renderQuestionList = function() {
+                originalRenderQuestionList.apply(this, arguments);
+                // 少し遅延させてカウントを更新（DOMの更新後に実行するため）
+                setTimeout(updateChipCounts, 0);
+            };
+        }
+        
+        // フィルターチップのクリックイベント
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                // アクティブクラスを全て削除
+                filterChips.forEach(c => c.classList.remove('active'));
+                
+                // クリックされた項目にアクティブクラスを追加
+                this.classList.add('active');
+                
+                const filterType = this.dataset.filterType;
+                
+                // 講師が選択された場合のみステータスセクションを表示
+                if (filterType === 'instructor') {
+                    instructorStatusSection.style.display = 'block';
+                } else {
+                    instructorStatusSection.style.display = 'none';
+                    
+                    // ステータスフィルターをリセット
+                    const allStatusItem = document.querySelector('.filter-tab[data-filter-status="all"]');
+                    if (allStatusItem) {
+                        allStatusItem.classList.add('active');
+                        document.querySelectorAll('.filter-tab[data-filter-status]:not([data-filter-status="all"])').forEach(i => {
+                            i.classList.remove('active');
+                        });
+                    }
+                }
+                
+                // サイドバーの対応する項目も同期して選択状態にする
+                sidebarItems.forEach(item => {
+                    if (item.dataset.filterType === filterType) {
+                        item.classList.add('active');
+                        
+                        // サイドバー項目のクリックイベントを発火させる
+                        const clickEvent = new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        });
+                        item.dispatchEvent(clickEvent);
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // カウントを更新
+                setTimeout(updateChipCounts, 0);
+            });
+        });
+        
+        // サイドバー項目のクリックイベントを拡張して、フィルターチップと同期
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // フィルターチップも同期して更新
+                const filterType = this.dataset.filterType;
+                filterChips.forEach(chip => {
+                    if (chip.dataset.filterType === filterType) {
+                        chip.classList.add('active');
+                    } else {
+                        chip.classList.remove('active');
+                    }
+                });
+                
+                // カウントを更新
+                setTimeout(updateChipCounts, 0);
+            });
+        });
+        
+        // 定期的にカウントを更新（念のため）
+        setInterval(updateChipCounts, 1000);
+    }
+
+    // DOMContentLoaded内で呼び出し
+    document.addEventListener('DOMContentLoaded', function() {
+        // 既存のコード...
+        
+        // モバイルフィルターチップのセットアップ
+        setupMobileFilterChips();
+    });
 }); 

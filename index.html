@@ -133,6 +133,22 @@
             
             <!-- 右コンテンツ：質問リスト -->
             <div class="question-content">
+                <!-- モバイル用フィルターチップ -->
+                <div class="mobile-filter-chips">
+                    <div class="filter-chip active" data-filter-type="all">
+                        <span class="chip-text">すべて</span>
+                        <span class="chip-count">25</span>
+                    </div>
+                    <div class="filter-chip" data-filter-type="ai">
+                        <span class="chip-text">AI</span>
+                        <span class="chip-count">15</span>
+                    </div>
+                    <div class="filter-chip" data-filter-type="instructor">
+                        <span class="chip-text">講師</span>
+                        <span class="chip-count">10</span>
+                    </div>
+                </div>
+                
                 <!-- 右コンテンツヘッダー -->
                 <div class="question-content-header">
                     <!-- 講師ステータスセクション -->
@@ -184,6 +200,9 @@
             </div>
         </div>
     </div>
+
+    <!-- サイドバーオーバーレイ -->
+    <div class="sidebar-overlay"></div>
 
     <script src="script.js"></script>
 </body>

@@ -1464,9 +1464,243 @@ body {
 /* モバイル表示時のバッジ位置調整 */
 @media (max-width: 768px) {
     .nav-badge {
-        right: auto;
-        left: 36px;
-        top: 12px;
-        transform: none;
+        right: 40px; /* 右端に配置 */
+        left: auto;
+        top: 50%; /* 垂直中央 */
+        transform: translateY(-50%);
     }
+}
+
+/* モバイル向けのサイドバーとハンバーガーメニュー調整 */
+@media (max-width: 767px) {
+    /* サイドバーの調整 */
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        left: -100%;
+        top: var(--header-height);
+        height: calc(100vh - var(--header-height));
+        transition: left 0.3s ease;
+        z-index: 1000;
+        background-color: var(--bg-white);
+    }
+    
+    /* サイドバーがアクティブな時 */
+    .sidebar.active {
+        left: 0;
+    }
+    
+    /* メインコンテナの調整 */
+    .main-container {
+        margin-left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        background: white;
+    }
+    
+    /* ハンバーガーメニューボタンの表示 */
+    .hamburger-menu {
+        display: flex;
+    }
+    
+    /* ヘッダー右側（ドロップダウン）を非表示 */
+    .header-right {
+        display: none;
+    }
+    
+    /* ヘッダー左側を全幅に */
+    .header-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    /* ロゴの位置調整 */
+    .logo {
+        margin: 0 auto 0 0;
+    }
+}
+
+/* サイドバーオーバーレイ */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* モバイル表示時のオーバーレイ */
+@media (max-width: 767px) {
+    .sidebar.active + .sidebar-overlay {
+        display: block;
+        opacity: 1;
+    }
+}
+
+/* モバイル表示時のドロップダウン調整 */
+@media (max-width: 767px) {
+    /* サイドバー内のドロップダウン */
+    .sidebar-dropdown {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    /* モバイル用ドロップダウンの背景色と文字色 */
+    .header-dropdown.mobile {
+        background-color: var(--bg-white);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+/* モバイル表示時のページタイトル非表示 */
+@media (max-width: 767px) {
+    .page-title {
+        display: none;
+    }
+    
+    /* 検索バーを上部に配置 */
+    .page-header {
+        padding-top: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+}
+
+/* モバイル表示時の検索バー中央揃え */
+@media (max-width: 767px) {
+    /* 検索バーのコンテナを中央揃え */
+    .page-header {
+        justify-content: center;
+    }
+    
+    /* 検索バー自体のスタイル調整 */
+    .search-bar {
+        width: 90%; /* 画面幅の90%に設定 */
+        max-width: 400px; /* 最大幅を制限 */
+        margin: 0 auto; /* 左右のマージンを自動で中央揃え */
+        border-radius: 30px;
+    }
+}
+
+/* モバイル用フィルターチップ */
+.mobile-filter-chips {
+    display: none; /* デフォルトでは非表示 */
+    overflow-x: auto; /* 横方向のスクロールを有効化 */
+    white-space: nowrap; /* 折り返しを防止 */
+    padding: 12px 16px;
+    background-color: var(--bg-white);
+    border-bottom: 1px solid var(--border);
+    -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
+    scrollbar-width: none; /* Firefoxでスクロールバーを非表示 */
+}
+
+/* スクロールバーを非表示（Chrome, Safari） */
+.mobile-filter-chips::-webkit-scrollbar {
+    display: none;
+}
+
+/* フィルターチップ */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 18px;
+    margin-right: 8px;
+    background-color: var(--bg-light);
+    border-radius: 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    border: 1px solid var(--border);
+    min-height: 36px; /* 十分な高さ */
+    touch-action: manipulation; /* タッチ操作の最適化 */
+}
+
+/* 最後のチップの右マージン */
+.filter-chip:last-child {
+    margin-right: 16px; /* スクロール時に右端に余白を作る */
+}
+
+/* アクティブなフィルターチップ */
+.filter-chip.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* チップ内のカウント表示 */
+.chip-count {
+    margin-left: 6px;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+}
+
+/* アクティブチップ内のカウント表示 */
+.filter-chip.active .chip-count {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* タッチフィードバック */
+.filter-chip:active {
+    opacity: 0.8; /* タップ時の視覚的フィードバック */
+}
+
+/* モバイル表示時のみフィルターチップを表示 */
+@media (max-width: 767px) {
+    .mobile-filter-chips {
+        display: flex;
+    }
+    
+    /* モバイル表示時はサイドバーのフィルターを非表示 */
+    .question-sidebar {
+        display: none;
+    }
+
+    .main-content{
+        padding-right: 0px;
+    }
+}
+
+/* スマホ表示時のテキスト省略表示 */
+@media (max-width: 767px) {
+    .action-path, 
+    .action-name {
+        white-space: nowrap;        /* テキストを折り返さない */
+        overflow: hidden;           /* はみ出した部分を隠す */
+        text-overflow: ellipsis;    /* はみ出した部分を省略記号で表示 */
+        max-width: 100%;            /* 最大幅を親要素に合わせる */
+    }
+    
+    /* 質問アイテムのコンテナにも制約を追加 */
+    .question-item-content {
+        overflow: hidden;           /* はみ出した部分を隠す */
+        width: 100%;                /* 幅を100%に設定 */
+    }
+    
+    /* 質問アイテム全体の余白調整 */
+    .question-item {
+        padding: 12px 16px;         /* 余白を少し小さく */
+    }
+    
+    /* アクションコンテナの幅調整 */
+    .action-container {
+        width: calc(100% - 40px);   /* アイコンやボタンのスペースを考慮 */
+    }
+}
+
+/* AIアシスタントのフィルターチップのカウントを非表示 */
+.filter-chip[data-filter-type="ai"] .chip-count {
+    display: none;
 }

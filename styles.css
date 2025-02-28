@@ -1598,7 +1598,6 @@ body {
     white-space: nowrap; /* 折り返しを防止 */
     padding: 12px 16px;
     background-color: var(--bg-white);
-    border-bottom: 1px solid var(--border);
     -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
     scrollbar-width: none; /* Firefoxでスクロールバーを非表示 */
 }
@@ -1710,4 +1709,31 @@ body {
 /* AIアシスタントのフィルターチップのカウントを非表示 */
 .filter-chip[data-filter-type="ai"] .chip-count {
     display: none;
+}
+
+/* スマホ表示時のquestion-content-headerのborder-radius設定 - 修正版 */
+@media (max-width: 767px) {
+    /* 親要素にもoverflow: hiddenを追加 */
+    .question-item,
+    .question-content-container {
+        overflow: hidden;
+    }
+    
+    /* より具体的なセレクタを使用 */
+    .question-content .question-content-header,
+    .question-item .question-content-header,
+    div.question-content-header {
+        border-top-left-radius: var(--radius-base) !important;
+        border-top-right-radius: var(--radius-base) !important;
+        overflow: hidden;
+        border-top: 1px solid var(--border);
+    }
+    
+    .question-content,
+    .question-item .question-content,
+    div.question-content {
+        border-radius: var(--radius-base) !important;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
 }

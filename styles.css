@@ -1062,6 +1062,7 @@ body {
 @media (max-width: 768px) {
     .instructor-status-tabs{
         padding-bottom: 4px;
+        max-width: 100% !important;
     }
 
     .instructor-status-tabs .filter-tab {
@@ -1191,7 +1192,7 @@ body {
     display: none; /* 初期状態では非表示 */
     flex-grow: 1; /* 利用可能なスペースを埋める */
     margin-right: auto; /* 右側の自動マージンで左寄せ */
-    max-width: 100%; /* 最大幅を制限して右側のページネーションのスペースを確保 */
+    max-width: 70%; /* 最大幅を制限して右側のページネーションのスペースを確保 */
 }
 
 .instructor-status-tabs.visible {
@@ -1774,29 +1775,6 @@ body {
     
     .filter-tab[data-filter-status="pending"] .mobile-text {
         display: inline; /* モバイルテキストを表示 */
-    }
-}
-
-/* スマホ表示時に既読ボタンのpadding-leftを0にする */
-@media (max-width: 767px) {
-    .filter-tab[data-filter-status="read"] {
-        padding-left: 0px !important;
-    }
-}
-
-/* スマホ表示時にフィルタータブのパディングを調整 */
-@media (max-width: 767px) {
-    /* 既読ボタンの左パディングを0に */
-    .filter-tab[data-filter-status="read"] {
-        padding-left: 0px !important;
-    }
-    
-    /* 他のフィルタータブも必要に応じて調整 */
-    .filter-tab[data-filter-status="all"],
-    .filter-tab[data-filter-status="unread"],
-    .filter-tab[data-filter-status="pending"] {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
     }
 }
 

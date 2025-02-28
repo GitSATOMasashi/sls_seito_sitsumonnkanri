@@ -1060,8 +1060,12 @@ body {
 
 /* モバイル対応 */
 @media (max-width: 768px) {
+    .instructor-status-tabs{
+        padding-bottom: 4px;
+    }
+
     .instructor-status-tabs .filter-tab {
-        padding: 10px 8px;
+        padding: 8px 10px !important;
         font-size: 13px;
     }
     
@@ -1187,7 +1191,7 @@ body {
     display: none; /* 初期状態では非表示 */
     flex-grow: 1; /* 利用可能なスペースを埋める */
     margin-right: auto; /* 右側の自動マージンで左寄せ */
-    max-width: 70%; /* 最大幅を制限して右側のページネーションのスペースを確保 */
+    max-width: 100%; /* 最大幅を制限して右側のページネーションのスペースを確保 */
 }
 
 .instructor-status-tabs.visible {
@@ -1735,5 +1739,78 @@ body {
         border-radius: var(--radius-base) !important;
         overflow: hidden;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+}
+
+/* PCとスマホで表示テキストを変更 */
+.filter-tab[data-filter-status="pending"] {
+    font-size: 0; /* 元のテキストを非表示にする */
+    position: relative;
+}
+
+/* PC表示用のテキスト */
+.filter-tab[data-filter-status="pending"]::before {
+    content: "質問送信済み";
+    font-size: 12px; /* 元のフォントサイズに戻す */
+}
+
+/* スマホ表示用のテキスト */
+@media (max-width: 767px) {
+    .filter-tab[data-filter-status="pending"]::before {
+        content: "質問済み";
+        font-size: 12px;
+    }
+}
+
+/* PCとスマホで表示テキストを切り替え */
+.filter-tab[data-filter-status="pending"] .mobile-text {
+    display: none; /* モバイルテキストを非表示 */
+}
+
+@media (max-width: 767px) {
+    .filter-tab[data-filter-status="pending"] .pc-text {
+        display: none; /* PCテキストを非表示 */
+    }
+    
+    .filter-tab[data-filter-status="pending"] .mobile-text {
+        display: inline; /* モバイルテキストを表示 */
+    }
+}
+
+/* スマホ表示時に既読ボタンのpadding-leftを0にする */
+@media (max-width: 767px) {
+    .filter-tab[data-filter-status="read"] {
+        padding-left: 0px !important;
+    }
+}
+
+/* スマホ表示時にフィルタータブのパディングを調整 */
+@media (max-width: 767px) {
+    /* 既読ボタンの左パディングを0に */
+    .filter-tab[data-filter-status="read"] {
+        padding-left: 0px !important;
+    }
+    
+    /* 他のフィルタータブも必要に応じて調整 */
+    .filter-tab[data-filter-status="all"],
+    .filter-tab[data-filter-status="unread"],
+    .filter-tab[data-filter-status="pending"] {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+/* スマホ表示時にinstructor activeの場合にページネーションを非表示 */
+@media (max-width: 767px) {
+    .sidebar-item[data-filter-type="instructor"].active ~ .main-container .pagination.top-pagination,
+    .filter-chip[data-filter-type="instructor"].active ~ .question-list-container .pagination.top-pagination {
+        display: none !important;
+    }
+}
+
+/* スマホ表示時にinstructor activeの場合にページネーションを非表示 */
+@media (max-width: 767px) {
+    .pagination.top-pagination.hide-on-instructor-mobile {
+        display: none !important;
     }
 }

@@ -2097,4 +2097,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // DOMContentLoadedイベントの最後に以下を追加
     setTimeout(debugFilterChips, 1000);
+
+    // PCとスマホでテキストを切り替える関数
+    function updatePendingTabText() {
+        const pendingTab = document.querySelector('.filter-tab[data-filter-status="pending"]');
+        if (!pendingTab) return;
+        
+        const isMobile = window.innerWidth <= 767;
+        
+        // 元のテキストを保存
+        if (!pendingTab.dataset.originalText && pendingTab.textContent.trim()) {
+            pendingTab.dataset.originalText = pendingTab.textContent.trim();
+        }
+        
+        // テキストを切り替え
+        if (isMobile) {
+            pendingTab.textContent = "質問済み";
+        } else if (pendingTab.dataset.originalText) {
+            pendingTab.textContent = pendingTab.dataset.originalText;
+        }
+    }
+
+    // 初期実行
+    document.addEventListener('DOMContentLoaded', updatePendingTabText);
+
+    // ウィンドウサイズ変更時にも実行
+    window.addEventListener('resize', updatePendingTabText);
+
+    // スマホ表示時にinstructor activeの場合にページネーションを非表示にする関数
+    function updatePaginationVisibility() {
+        const isMobile = window.innerWidth <= 767;
+        const isInstructorActive = document.querySelector('.sidebar-item[data-filter-type="instructor"].active') !== null ||
+                                  document.querySelector('.filter-chip[data-filter-type="instructor"].active') !== null;
+        
+        const topPagination = document.querySelector('.pagination.top-pagination');
+        
+        if (topPagination) {
+            if (isMobile && isInstructorActive) {
+                topPagination.style.display = 'none';
+            } else {
+                topPagination.style.display = '';
+            }
+        }
+    }
+
+    // 初期実行
+    updatePaginationVisibility();
+
+    // ウィンドウサイズ変更時にも実行
+    window.addEventListener('resize', updatePaginationVisibility);
+
+    // フィルター変更時にも実行
+    const filterItems = document.querySelectorAll('.sidebar-item[data-filter-type], .filter-chip[data-filter-type]');
+    filterItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // 少し遅延させて実行（クリックイベント処理後）
+            setTimeout(updatePaginationVisibility, 50);
+        });
+    });
 }); 

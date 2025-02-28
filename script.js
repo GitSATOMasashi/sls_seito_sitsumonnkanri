@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     typeFilterItems.forEach(item => {
         item.addEventListener('click', function() {
-            console.log('Type filter clicked:', this.querySelector('.sidebar-text').textContent);
             // アクティブクラスを全て削除
             typeFilterItems.forEach(i => i.classList.remove('active'));
             
@@ -73,12 +72,11 @@ document.addEventListener('DOMContentLoaded', function() {
             renderQuestionList();
         });
     });
-    
+
     // 講師ステータスフィルターのイベントリスナー
     const statusFilterItems = document.querySelectorAll('.filter-tab[data-filter-status]');
     statusFilterItems.forEach(item => {
         item.addEventListener('click', function() {
-            console.log('Status filter clicked:', this.textContent.trim());
             // アクティブクラスを全て削除
             statusFilterItems.forEach(i => i.classList.remove('active'));
             
@@ -101,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 表示するアイテムの切り替え - フィルタリングを考慮
     function updateVisibleItems() {
-        console.log('Updating visible items for page:', currentPage);
         const questionItems = document.querySelectorAll('.question-item');
         
         // フィルタリングされていないアイテムを取得
@@ -111,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 総アイテム数を更新
         totalItems = visibleItems.length;
-        console.log('Total visible items:', totalItems);
         
         // すべてのアイテムを一旦非表示にする
         questionItems.forEach(item => {
@@ -122,12 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, visibleItems.length);
         
-        console.log(`Showing items from ${startIndex} to ${endIndex-1} of filtered items`);
-        
         for (let i = startIndex; i < endIndex; i++) {
             if (visibleItems[i]) {
                 visibleItems[i].style.display = 'flex';
-                console.log(`Showing item: ${visibleItems[i].querySelector('.action-name').textContent}`);
             }
         }
         
@@ -168,8 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxPage = Math.ceil(totalItems / itemsPerPage);
             nextButton.disabled = currentPage >= maxPage || totalItems === 0;
         }
-        
-        console.log('Pagination updated:', startItem, '-', endItem, '/', totalItems);
     }
 
     // ページネーションボタンのイベントリスナー
@@ -277,6 +268,35 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count').textContent = allUnreadCount > 0 ? allUnreadCount : '';
         document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count').textContent = ''; // AIは常に空
         document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count').textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
+        
+        // フィルターチップのカウントも更新
+        const allChip = document.querySelector('.filter-chip[data-filter-type="all"] .chip-count');
+        if (allChip) {
+            if (allUnreadCount > 0) {
+                allChip.textContent = allUnreadCount;
+                allChip.style.display = ''; // 表示
+            } else {
+                allChip.textContent = '';
+                allChip.style.display = 'none'; // 非表示
+            }
+        }
+        
+        const aiChip = document.querySelector('.filter-chip[data-filter-type="ai"] .chip-count');
+        if (aiChip) {
+            aiChip.textContent = ''; // AIは常に空
+            aiChip.style.display = 'none'; // 常に非表示
+        }
+        
+        const instructorChip = document.querySelector('.filter-chip[data-filter-type="instructor"] .chip-count');
+        if (instructorChip) {
+            if (instructorUnreadCount > 0) {
+                instructorChip.textContent = instructorUnreadCount;
+                instructorChip.style.display = ''; // 表示
+            } else {
+                instructorChip.textContent = '';
+                instructorChip.style.display = 'none'; // 非表示
+            }
+        }
         
         // 各フィルタータブのカウントを更新
         const pendingTab = document.querySelector('.filter-tab[data-filter-status="pending"]');
@@ -1354,8 +1374,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 検索を実行する関数
     function performSearch(searchTerm) {
-        console.log('Searching for:', searchTerm);
-        
         // 検索ワードを保存（ハイライト表示に使用）
         currentSearchTerm = searchTerm;
         
@@ -1522,8 +1540,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 検索をクリアする関数
     function clearSearch() {
-        console.log('Clearing search');
-        
         // 検索ワードをクリア
         currentSearchTerm = '';
         
@@ -1587,7 +1603,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ウィンドウサイズ変更時のサイドバー調整
     function adjustSidebarOnResize() {
-        const sidebar = document.querySelector('.sidebar');
+    const sidebar = document.querySelector('.sidebar');
         const hamburgerMenu = document.querySelector('.hamburger-menu');
         
         // ウィンドウサイズが変わったときの処理
@@ -1611,136 +1627,474 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (overlay) {
             overlay.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-                hamburgerMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
             });
         }
     }
 
     // モバイルフィルターチップの設定
     function setupMobileFilterChips() {
+        console.log('Setting up mobile filter chips...');
+        
         const filterChips = document.querySelectorAll('.filter-chip');
         const sidebarItems = document.querySelectorAll('.sidebar-item[data-filter-type]');
-        const instructorStatusSection = document.getElementById('instructorStatusSection');
         
-        if (!filterChips.length) return; // フィルターチップがなければ終了
-        
-        // フィルターチップのカウントを更新する関数
-        function updateChipCounts() {
-            // サイドバーのカウントをフィルターチップにも反映
-            sidebarItems.forEach(item => {
-                const filterType = item.dataset.filterType;
-                const count = item.querySelector('.sidebar-count').textContent;
-                const chip = document.querySelector(`.filter-chip[data-filter-type="${filterType}"] .chip-count`);
-                if (chip) {
-                    chip.textContent = count;
-                    console.log(`Updated chip count for ${filterType}: ${count}`);
-                }
-            });
-            
-            // アクティブなサイドバー項目に対応するチップもアクティブに
-            const activeSidebarItem = document.querySelector('.sidebar-item.active');
-            if (activeSidebarItem) {
-                const filterType = activeSidebarItem.dataset.filterType;
-                filterChips.forEach(chip => {
-                    if (chip.dataset.filterType === filterType) {
-                        chip.classList.add('active');
-                    } else {
-                        chip.classList.remove('active');
-                    }
-                });
-            }
+        if (!filterChips.length) {
+            console.log('No filter chips found');
+            return; // フィルターチップがなければ終了
         }
         
-        // 初期状態の設定
-        updateChipCounts();
-        
-        // 質問リストが更新されるたびにカウントも更新
-        const originalRenderQuestionList = window.renderQuestionList;
-        if (typeof originalRenderQuestionList === 'function') {
-            window.renderQuestionList = function() {
-                originalRenderQuestionList.apply(this, arguments);
-                // 少し遅延させてカウントを更新（DOMの更新後に実行するため）
-                setTimeout(updateChipCounts, 0);
-            };
-        }
+        console.log('Found filter chips:', filterChips.length);
         
         // フィルターチップのクリックイベント
         filterChips.forEach(chip => {
-            chip.addEventListener('click', function() {
-                // アクティブクラスを全て削除
-                filterChips.forEach(c => c.classList.remove('active'));
-                
-                // クリックされた項目にアクティブクラスを追加
-                this.classList.add('active');
-                
-                const filterType = this.dataset.filterType;
-                
-                // 講師が選択された場合のみステータスセクションを表示
-                if (filterType === 'instructor') {
-                    instructorStatusSection.style.display = 'block';
-                } else {
-                    instructorStatusSection.style.display = 'none';
+            console.log('Adding click event to chip:', chip.dataset.filterType);
+            
+            // 既存のイベントリスナーを削除（重複防止）
+            chip.removeEventListener('click', filterChipClickHandler);
+            
+            // 新しいイベントリスナーを追加
+            chip.addEventListener('click', filterChipClickHandler);
+        });
+        
+        // フィルターチップのクリックハンドラー関数
+        function filterChipClickHandler(event) {
+            console.log('Filter chip clicked:', this.dataset.filterType);
+            
+            // アクティブクラスを全て削除
+            filterChips.forEach(c => c.classList.remove('active'));
+            
+            // クリックされた項目にアクティブクラスを追加
+            this.classList.add('active');
+            
+            const filterType = this.dataset.filterType;
+            
+            // サイドバーの対応する項目も同期して選択状態にする
+            sidebarItems.forEach(item => {
+                if (item.dataset.filterType === filterType) {
+                    item.classList.add('active');
                     
-                    // ステータスフィルターをリセット
-                    const allStatusItem = document.querySelector('.filter-tab[data-filter-status="all"]');
-                    if (allStatusItem) {
-                        allStatusItem.classList.add('active');
-                        document.querySelectorAll('.filter-tab[data-filter-status]:not([data-filter-status="all"])').forEach(i => {
-                            i.classList.remove('active');
-                        });
+                    // サイドバー項目のクリックイベントを発火させる
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    item.dispatchEvent(clickEvent);
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // カウントを更新
+            setTimeout(updateSidebarCounts, 50);
+            
+            // イベントの伝播を停止
+            event.stopPropagation();
+        }
+        
+        // 初期状態の設定
+        updateSidebarCounts();
+    }
+
+    // DOMContentLoadedイベントの最後に以下を追加
+    setupMobileFilterChips();
+
+    /**
+     * サイドバーとフィルターチップのカウントを更新する統合関数
+     */
+    function updateCounts() {
+        // questionDataが利用可能な場合はそれを使用
+        if (typeof questionData !== 'undefined' && Array.isArray(questionData)) {
+            // 未読メッセージの件数を取得
+            const allUnreadCount = questionData.filter(q => q.isUnread).length;
+            const aiUnreadCount = 0; // AIチャットは常に既読なので0
+            const instructorUnreadCount = questionData.filter(q => q.type === 'instructor' && q.isUnread).length;
+            
+            // 質問送信済みの件数を取得
+            const pendingCount = questionData.filter(q => q.type === 'instructor' && q.isPending).length;
+            
+            // 既読の件数を取得
+            const readCount = questionData.filter(q => q.type === 'instructor' && !q.isUnread && !q.isPending).length;
+            
+            // サイドバーのカウントを更新
+            const allSidebarCount = document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count');
+            if (allSidebarCount) {
+                allSidebarCount.textContent = allUnreadCount > 0 ? allUnreadCount : '';
+            }
+            
+            const aiSidebarCount = document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count');
+            if (aiSidebarCount) {
+                aiSidebarCount.textContent = ''; // AIは常に空
+            }
+            
+            const instructorSidebarCount = document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count');
+            if (instructorSidebarCount) {
+                instructorSidebarCount.textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
+            }
+            
+            // フィルターチップのカウントを更新
+            const allChip = document.querySelector('.filter-chip[data-filter-type="all"] .chip-count');
+            if (allChip) {
+                allChip.textContent = allUnreadCount > 0 ? allUnreadCount : '';
+            }
+            
+            const aiChip = document.querySelector('.filter-chip[data-filter-type="ai"] .chip-count');
+            if (aiChip) {
+                aiChip.textContent = ''; // AIは常に空
+            }
+            
+            const instructorChip = document.querySelector('.filter-chip[data-filter-type="instructor"] .chip-count');
+            if (instructorChip) {
+                instructorChip.textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
+            }
+            
+            // 各フィルタータブのカウントを更新
+            const pendingTab = document.querySelector('.filter-tab[data-filter-status="pending"]');
+            if (pendingTab) {
+                pendingTab.dataset.count = pendingCount;
+            }
+            
+            const unreadTab = document.querySelector('.filter-tab[data-filter-status="unread"]');
+            if (unreadTab) {
+                unreadTab.dataset.count = instructorUnreadCount;
+            }
+            
+            const readTab = document.querySelector('.filter-tab[data-filter-status="read"]');
+            if (readTab) {
+                readTab.dataset.count = readCount;
+            }
+            
+            const allTab = document.querySelector('.filter-tab[data-filter-status="all"]');
+            if (allTab) {
+                // すべての講師への質問の数
+                const allInstructorCount = questionData.filter(q => q.type === 'instructor').length;
+                allTab.dataset.count = allInstructorCount;
+            }
+        } else {
+            // questionDataが利用できない場合はDOM要素から直接カウント
+            // 質問アイテムを取得
+            const questionItems = document.querySelectorAll('.question-item');
+            
+            // 未読メッセージをカウント
+            let allUnreadCount = 0;
+            let aiUnreadCount = 0;
+            let instructorUnreadCount = 0;
+            
+            questionItems.forEach(item => {
+                // 未読かどうかをチェック（通知バッジがあるかどうか）
+                const isUnread = item.querySelector('.notification-badge') !== null;
+                
+                if (isUnread) {
+                    allUnreadCount++;
+                    
+                    // タイプに応じてカウント
+                    if (item.querySelector('.badge-ai') !== null) {
+                        aiUnreadCount++;
+                    } else if (item.querySelector('.badge-instructor') !== null) {
+                        instructorUnreadCount++;
+                    }
+                }
+            });
+            
+            // サイドバーのカウントを更新
+            const allSidebarCount = document.querySelector('.sidebar-item[data-filter-type="all"] .sidebar-count');
+            if (allSidebarCount) {
+                allSidebarCount.textContent = allUnreadCount > 0 ? allUnreadCount : '';
+            }
+            
+            const aiSidebarCount = document.querySelector('.sidebar-item[data-filter-type="ai"] .sidebar-count');
+            if (aiSidebarCount) {
+                aiSidebarCount.textContent = ''; // AIは常に空
+            }
+            
+            const instructorSidebarCount = document.querySelector('.sidebar-item[data-filter-type="instructor"] .sidebar-count');
+            if (instructorSidebarCount) {
+                instructorSidebarCount.textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
+            }
+            
+            // フィルターチップのカウントを更新
+            const allChip = document.querySelector('.filter-chip[data-filter-type="all"] .chip-count');
+            if (allChip) {
+                allChip.textContent = allUnreadCount > 0 ? allUnreadCount : '';
+            }
+            
+            const aiChip = document.querySelector('.filter-chip[data-filter-type="ai"] .chip-count');
+            if (aiChip) {
+                aiChip.textContent = ''; // AIは常に空
+            }
+            
+            const instructorChip = document.querySelector('.filter-chip[data-filter-type="instructor"] .chip-count');
+            if (instructorChip) {
+                instructorChip.textContent = instructorUnreadCount > 0 ? instructorUnreadCount : '';
+            }
+        }
+        
+        // フィルタータブのカウント表示を更新
+        updateFilterTabCounts();
+        
+        // アクティブなサイドバー項目に対応するチップもアクティブに
+        const activeSidebarItem = document.querySelector('.sidebar-item.active');
+        if (activeSidebarItem) {
+            const filterType = activeSidebarItem.dataset.filterType;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.filterType === filterType);
+            });
+        }
+    }
+
+    // questionDataが定義されていない場合は初期化
+    if (typeof questionData === 'undefined') {
+        // ダミーデータを作成
+        window.questionData = [
+            { id: 1, type: 'ai', isUnread: false, isPending: false },
+            { id: 2, type: 'instructor', isUnread: true, isPending: false },
+            { id: 3, type: 'instructor', isUnread: true, isPending: false },
+            { id: 4, type: 'instructor', isUnread: true, isPending: false },
+            { id: 5, type: 'instructor', isUnread: false, isPending: true }
+        ];
+    }
+
+    // DOM要素から未読メッセージをカウントする関数
+    function countUnreadMessagesFromDOM() {
+        const questionItems = document.querySelectorAll('.question-item');
+        let allUnreadCount = 0;
+        let aiUnreadCount = 0;
+        let instructorUnreadCount = 0;
+        
+        questionItems.forEach(item => {
+            // 未読かどうかをチェック（通知バッジがあるかどうか）
+            const notificationBadge = item.querySelector('.notification-badge');
+            const isUnread = notificationBadge !== null;
+            
+            if (isUnread) {
+                allUnreadCount++;
+                
+                // タイプに応じてカウント
+                if (item.querySelector('.badge-ai')) {
+                    aiUnreadCount++;
+                } else if (item.querySelector('.badge-instructor')) {
+                    instructorUnreadCount++;
+                }
+            }
+        });
+        
+        return {
+            all: allUnreadCount,
+            ai: aiUnreadCount,
+            instructor: instructorUnreadCount
+        };
+    }
+
+    // デバッグ用のコード
+    function debugChipCounts() {
+        const allChip = document.querySelector('.filter-chip[data-filter-type="all"] .chip-count');
+        const aiChip = document.querySelector('.filter-chip[data-filter-type="ai"] .chip-count');
+        const instructorChip = document.querySelector('.filter-chip[data-filter-type="instructor"] .chip-count');
+        
+        console.log('All chip:', allChip ? allChip.textContent : 'not found');
+        console.log('AI chip:', aiChip ? aiChip.textContent : 'not found');
+        console.log('Instructor chip:', instructorChip ? instructorChip.textContent : 'not found');
+        
+        // 要素のスタイルを確認
+        if (allChip) {
+            console.log('All chip style:', window.getComputedStyle(allChip));
+        }
+    }
+
+    // 関数を呼び出す
+    setTimeout(debugChipCounts, 1000);
+
+    // DOMContentLoadedイベントの最後に以下を追加
+    // updateCounts関数を呼び出す
+    setTimeout(function() {
+        if (typeof updateCounts === 'function') {
+            updateCounts();
+            console.log('updateCounts called');
+        } else {
+            console.error('updateCounts function not found');
+        }
+    }, 500);
+
+    // デバッグ用の関数
+    function debugChipCounts() {
+        const allChip = document.querySelector('.filter-chip[data-filter-type="all"] .chip-count');
+        const aiChip = document.querySelector('.filter-chip[data-filter-type="ai"] .chip-count');
+        const instructorChip = document.querySelector('.filter-chip[data-filter-type="instructor"] .chip-count');
+        
+        console.log('All chip:', allChip ? allChip.textContent : 'not found');
+        console.log('AI chip:', aiChip ? aiChip.textContent : 'not found');
+        console.log('Instructor chip:', instructorChip ? instructorChip.textContent : 'not found');
+    }
+
+    // デバッグ関数を呼び出す
+    setTimeout(debugChipCounts, 1000);
+
+    // 既読ボタンのイベントリスナーを追加
+    function setupReadStatusListeners() {
+        // 既読ボタン（通知バッジの削除ボタンなど）を取得
+        const readButtons = document.querySelectorAll('.mark-as-read-btn, .notification-badge');
+        
+        readButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // クリックされた要素が通知バッジの場合
+                if (this.classList.contains('notification-badge')) {
+                    // 通知バッジを削除（既読にする）
+                    this.remove();
+                }
+                
+                // questionDataを更新（該当するメッセージを既読にする）
+                const questionItem = this.closest('.question-item');
+                if (questionItem && window.questionData) {
+                    const questionId = questionItem.dataset.id;
+                    const questionIndex = window.questionData.findIndex(q => q.id.toString() === questionId);
+                    
+                    if (questionIndex !== -1) {
+                        window.questionData[questionIndex].isUnread = false;
                     }
                 }
                 
-                // サイドバーの対応する項目も同期して選択状態にする
-                sidebarItems.forEach(item => {
-                    if (item.dataset.filterType === filterType) {
-                        item.classList.add('active');
-                        
-                        // サイドバー項目のクリックイベントを発火させる
-                        const clickEvent = new MouseEvent('click', {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window
-                        });
-                        item.dispatchEvent(clickEvent);
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
-                
                 // カウントを更新
-                setTimeout(updateChipCounts, 0);
+                updateSidebarCounts();
+                
+                e.stopPropagation(); // イベントの伝播を停止
             });
         });
-        
-        // サイドバー項目のクリックイベントを拡張して、フィルターチップと同期
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', function() {
-                // フィルターチップも同期して更新
-                const filterType = this.dataset.filterType;
-                filterChips.forEach(chip => {
-                    if (chip.dataset.filterType === filterType) {
-                        chip.classList.add('active');
-                    } else {
-                        chip.classList.remove('active');
-                    }
-                });
-                
-                // カウントを更新
-                setTimeout(updateChipCounts, 0);
-            });
-        });
-        
-        // 定期的にカウントを更新（念のため）
-        setInterval(updateChipCounts, 1000);
     }
 
-    // DOMContentLoaded内で呼び出し
-    document.addEventListener('DOMContentLoaded', function() {
-        // 既存のコード...
+    // DOMContentLoadedイベントの最後に以下を追加
+    setupReadStatusListeners();
+
+    // 質問リストが更新されるたびに既読状態のリスナーも更新
+    const originalRenderQuestionList = window.renderQuestionList;
+    if (typeof originalRenderQuestionList === 'function') {
+        window.renderQuestionList = function() {
+            originalRenderQuestionList.apply(this, arguments);
+            // 質問リストが更新された後に既読状態のリスナーを設定
+            setTimeout(setupReadStatusListeners, 50);
+            // カウントも更新
+            setTimeout(updateCounts, 100);
+        };
+    }
+
+    // MutationObserverを使用して通知バッジの変更を検知
+    function setupNotificationObserver() {
+        // 質問リストを監視
+        const questionList = document.querySelector('.question-list');
+        if (!questionList) return;
         
-        // モバイルフィルターチップのセットアップ
-        setupMobileFilterChips();
+        // オブザーバーの設定
+        const observer = new MutationObserver(function(mutations) {
+            let shouldUpdateCounts = false;
+            
+            mutations.forEach(function(mutation) {
+                // 子ノードの追加・削除を検知
+                if (mutation.type === 'childList') {
+                    // 通知バッジの追加・削除を検知
+                    const addedNodes = Array.from(mutation.addedNodes);
+                    const removedNodes = Array.from(mutation.removedNodes);
+                    
+                    const hasNotificationBadge = node => 
+                        node.nodeType === 1 && (
+                            node.classList && node.classList.contains('notification-badge') ||
+                            node.querySelector && node.querySelector('.notification-badge')
+                        );
+                    
+                    if (addedNodes.some(hasNotificationBadge) || removedNodes.some(hasNotificationBadge)) {
+                        shouldUpdateCounts = true;
+                    }
+                }
+            });
+            
+            // 通知バッジの変更があった場合はカウントを更新
+            if (shouldUpdateCounts) {
+                if (typeof updateCounts === 'function') {
+                    updateCounts();
+                } else if (typeof updateChipCounts === 'function') {
+                    updateChipCounts();
+                }
+            }
+        });
+        
+        // 監視を開始
+        observer.observe(questionList, {
+            childList: true,
+            subtree: true
+        });
+        
+        return observer;
+    }
+
+    // DOMContentLoadedイベントの最後に以下を追加
+    const notificationObserver = setupNotificationObserver();
+
+    // フィルターチップのクリックイベント
+    const filterChips = document.querySelectorAll('.filter-chip');
+    filterChips.forEach(chip => {
+        // 既存のイベントリスナーを削除（重複防止）
+        chip.removeEventListener('click', filterChipClickHandler);
+        
+        // 新しいイベントリスナーを追加
+        chip.addEventListener('click', filterChipClickHandler);
     });
+
+    // フィルターチップのクリックハンドラー関数
+    function filterChipClickHandler(event) {
+        console.log('Filter chip clicked:', this.dataset.filterType);
+        
+        // アクティブクラスを全て削除
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        
+        // クリックされた項目にアクティブクラスを追加
+        this.classList.add('active');
+        
+        const filterType = this.dataset.filterType;
+        
+        // サイドバーの対応する項目も同期して選択状態にする
+        const sidebarItems = document.querySelectorAll('.sidebar-item[data-filter-type]');
+        sidebarItems.forEach(item => {
+            if (item.dataset.filterType === filterType) {
+                item.classList.add('active');
+                
+                // サイドバー項目のクリックイベントを発火させる
+                const clickEvent = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                });
+                item.dispatchEvent(clickEvent);
+            } else {
+                item.classList.remove('active');
+            }
+        });
+        
+        // カウントを更新
+        setTimeout(updateSidebarCounts, 50);
+        
+        // イベントの伝播を停止
+        event.stopPropagation();
+    }
+
+    // フィルターチップのデバッグ
+    function debugFilterChips() {
+        const filterChips = document.querySelectorAll('.filter-chip');
+        
+        console.log('Filter chips count:', filterChips.length);
+        
+        filterChips.forEach(chip => {
+            console.log('Chip:', chip.dataset.filterType);
+            console.log('- Has click listeners:', getEventListeners(chip).click?.length > 0);
+            console.log('- Style:', window.getComputedStyle(chip));
+            console.log('- Position:', chip.getBoundingClientRect());
+            
+            // クリックイベントをテスト
+            chip.addEventListener('click', function() {
+                console.log('Test click on chip:', this.dataset.filterType);
+            });
+        });
+    }
+
+    // DOMContentLoadedイベントの最後に以下を追加
+    setTimeout(debugFilterChips, 1000);
 }); 
